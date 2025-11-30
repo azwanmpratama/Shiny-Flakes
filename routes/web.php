@@ -7,47 +7,69 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+// =========================================================================
+// ROUTE PUBLIK (Toko & Login) - Tidak perlu login untuk akses ini
+// =========================================================================
+
+// Halaman Toko (Kamuflase & Asli)
+Route::get('/shop', function () {
+    return view('shop.index');
+})->name('shop.index');
+
+Route::get('/shop/detail', function () {
+    return view('shop.detail');
+})->name('shop.detail');
+
+// Halaman Login
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
-Route::middleware('IsLogin', 'CekRole:admin, kasir')->group(function() {
-    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-    Route::get('/produk', [ProdukController::class, 'index']);
-    Route::get('/pembelian', [PembelianController::class, 'index']);
-    Route::get('/actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
+// =========================================================================
+// ROUTE AUTHENTICATED (Harus Login Dulu)
+// =========================================================================
+
+// Logout (Cukup middleware 'auth', tidak perlu cek role)
+Route::get('/actionlogout', [LoginController::class, 'actionlogout'])
+    ->name('actionlogout')
+    ->middleware('auth');
+
+// Grup Route yang butuh Login DAN Pengecekan Role (Admin/Kasir)
+// Perbaikan: Mengganti 'IsLogin' menjadi 'auth'
+Route::middleware(['auth', 'CekRole:admin,kasir'])->group(function() {
+    
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/search', [DashboardController::class, 'search'])->name('search');
+    
+    // Produk
+    Route::get('/produk', [ProdukController::class, 'index'])->name('indexProduk');
+    Route::post('/tambah-produk', [ProdukController::class, 'store'])->name('tambah-produk');
+    
+    // Transaksi
+    Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian');
+    
+    // User Management
+    Route::get('/user', [UserController::class, 'index'])->name('user');
+    
+    // Route untuk Drug List (Admin)
+    Route::get('/drug', [App\Http\Controllers\DrugController::class, 'index'])->name('drug.index');
+    Route::post('/drug/store', [App\Http\Controllers\DrugController::class, 'store'])->name('drug.store');
+    Route::delete('/drug/delete/{id}', [App\Http\Controllers\DrugController::class, 'destroy'])->name('drug.delete');
+
+    // Route untuk Proses Checkout (Simpan Transaksi)
+    Route::post('/shop/checkout', [ShopController::class, 'store'])->name('shop.checkout');
+
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-Route::get('/search', [DashboardController::class, 'search'])->name('search');
-
-
-Route::get('/produk', [ProdukController::class, 'index'])->name('indexProduk');
-
-Route::post('/tambah-produk', [ProdukController::class, 'store'])->name('tambah-produk');
-
-Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian');
-
-Route::get('/user', [UserController::class, 'index'])->name('user');
-
-
-// Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
-// Route::get('/produk/{id}', [ProdukController::class, 'show']);
+// Opsional: Route CRUD Produk lainnya (jika diperlukan nanti)
 // Route::patch('/produk/update/{id}', [ProdukController::class, 'update']);
 // Route::delete('/produk/delete/{id}', [ProdukController::class, 'destroy']);
-// Route::get('/produk/show/trash', [ProdukController::class, 'trash']);
-// Route::get('/produk/trash/restore/{id}', [ProdukController::class, 'restore']);
-// Route::get('/produk/trash/delete/permanent/{id}', [ProdukController::class, 'permanentDelete']);

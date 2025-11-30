@@ -9,6 +9,8 @@ class PembelianController extends Controller
 {
     public function index()
     {
-        return view('pembelian.pembelian');
+        $transaksis = Transaction::latest()->get();
+
+        return view('pembelian.pembelian', compact('transaksis'));
     }
 }

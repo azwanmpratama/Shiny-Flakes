@@ -29,6 +29,7 @@ class LoginController extends Controller
 
     // Lakukan proses autentikasi dengan menggunakan credentials
     if (Auth::attempt($credentials)) {
+        // #$request->session()->regenerate();
         // Jika autentikasi berhasil, arahkan pengguna ke halaman sesuai dengan peran (role) pengguna
         if (Auth::user()->role == 'admin') {
             return redirect()->route('dashboard');
@@ -41,12 +42,12 @@ class LoginController extends Controller
     }
     }
 
-    public function logout()
+    public function actionlogout()
     {
     // Lakukan proses logout pengguna
     Auth::logout();
 
     // Redirect pengguna ke halaman login setelah logout
-    return redirect()->route('/');
+    return redirect()->route('login');
     }
 }

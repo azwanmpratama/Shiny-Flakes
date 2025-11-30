@@ -17,13 +17,18 @@ class CekRole
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        // ...$roles akan mengubah string yang dipisah dengan koma menjadi item array, namanya spread operator
-        // $request->user()->role akan ambil data user yang login bagian role
+        // Cek 1: Pastikan user sudah login
+        if (!Auth::check()) {
+            return redirect('/')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Cek 2: Apakah role user ada di dalam daftar role yang diizinkan?
+        // $roles dikirim dari route, misal: ['admin', 'kasir']
         if (in_array($request->user()->role, $roles)) {
             return $next($request);
-        } else {
-            return redirect()->back();
         }
-        return $next($request);
+
+        // Jika Role Tidak Cocok, lempar ke halaman login dengan pesan error
+        return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
     }
 }

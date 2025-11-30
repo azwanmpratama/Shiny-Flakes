@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords"
         content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Flexy lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Flexy admin lite design, Flexy admin lite dashboard bootstrap 5 dashboard template" />
@@ -13,85 +12,42 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>Sale - ShinyFlakes</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/Flexy-admin-lite/" />
-    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png" />
-    <!-- Custom CSS -->
     <link href="../assets/dist/css/style.min.css" rel="stylesheet" />
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
+    </head>
 
 <body>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
     <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
             <div class="lds-pos"></div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
     <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
         data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
         <header class="topbar" data-navbarbg="skin6">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header" data-logobg="skin6">
-                    <!-- ============================================================== -->
-                    <!-- Logo -->
-                    <!-- ============================================================== -->
                     <a class="navbar-brand" href="dashboard">
-                        <!-- Logo icon -->
                         <b class="logo-icon">
-                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            <!-- Dark Logo icon -->
                             <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo"
                                 style="width: 40px; height: auto;" />
-                            <!-- Light Logo icon -->
                             <img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
                         </b>
-                        <!--End Logo icon -->
-                        <!-- Logo text -->
                         <span class="logo-text" style="margin-top: 10px;">
-                            <!-- dark Logo text -->
                             <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo"
                                 style="width: 135px; height: auto;" />
-                            <!-- Light Logo text -->
                             <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
                         </span>
                     </a>
-                    <!-- ============================================================== -->
-                    <!-- End Logo -->
-                    <!-- ============================================================== -->
-                    <!-- This is for the sidebar toggle which is visible on mobile only -->
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
                             class="ti-menu ti-close"></i></a>
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
                 <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
                     <ul class="navbar-nav float-start me-auto">
-                        <!-- ============================================================== -->
-                        <!-- Search -->
-                        <!-- ============================================================== -->
                         <style>
                             /* CSS Kustom Anda */
                             .nav-item.search-box a.nav-link:hover .mdi.mdi-magnify {
@@ -115,13 +71,7 @@
                             </form>
                         </li>
                     </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
                     <ul class="navbar-nav float-end">
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="
                     nav-link
@@ -145,24 +95,13 @@
                                         class="mdi mdi-email m-r-5 m-l-5"></i> Inbox</a>
                             </ul>
                         </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
+                        </ul>
                 </div>
             </nav>
         </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
         <div style="margin-top: 20px; margin-bottom: 20px;">
             <aside class="left-sidebar" data-sidebarbg="skin6">
-                <!-- Sidebar scroll-->
                 <div class="scroll-sidebar" style="margin-top: 15px;">
-                    <!-- Sidebar navigation-->
                     <nav class="sidebar-nav">
                         <ul id="sidebarnav">
                             <li class="sidebar-item">
@@ -192,39 +131,15 @@
                                     aria-expanded="false"><i class="mdi mdi-pill" style="color: #3f51b5;"></i><span
                                         class="hide-menu" style="color: #3f51b5; font-weight: 550;">Drug List</span></a>
                             </li>
-                            <li class="sidebar-item">
-                                {{-- <a
-                  class="sidebar-link waves-effect waves-dark sidebar-link"
-                  href="error-404.html"
-                  aria-expanded="false"
-                  ><i class="mdi mdi-alert-outline"></i
-                  ><span class="hide-menu">404</span></a
-                >
-              </li>
-              <li class="text-center p-40 upgrade-btn">
-                <a
-                  href="https://www.wrappixel.com/templates/flexy-bootstrap-admin-template/"
-                  class="btn d-block w-100 btn-danger text-white"
-                  target="_blank"
-                  >Upgrade to Pro</a
-                > --}}
+                            <li class="text-center p-40 upgrade-btn">
+                                <a href="https://m.media-amazon.com/images/I/51WlnqNiCBL._AC_.jpg"
+                                    class="btn d-block w-100 btn-danger text-white" target="_blank">21 +</a>
                             </li>
                         </ul>
                     </nav>
-                    <!-- End Sidebar navigation -->
-                </div>
-                <!-- End Sidebar scroll-->
-            </aside>
-            <!-- ============================================================== -->
-            <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Page wrapper  -->
-            <!-- ============================================================== -->
+                    </div>
+                </aside>
             <div class="page-wrapper">
-                <!-- ============================================================== -->
-                <!-- Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
                 <div class="page-breadcrumb">
                     <div class="row align-items-center">
                         <div class="col-6">
@@ -243,16 +158,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Container fluid  -->
-                <!-- ============================================================== -->
                 <div class="container-fluid">
-                    <!-- ============================================================== -->
-                    <!-- Start Page Content -->
-                    <!-- ============================================================== -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
@@ -262,178 +168,127 @@
                                             class="btn btn-primary text-white mdi mdi-shredder" target="_blank"
                                             data-bs-toggle="tooltip" data-bs-placement="left" title="Export Sale (.xlsx)"
                                             id="tooltipBtn">
-                                            {{-- <i class="mdi mdi-cart-plus"></i> --}}
                                         </a>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="tambahProdukModal" tabindex="-1"
-                                            aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="tambahProdukModalLabel">Create Product</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                            
-                                                            <div class="container">
-                                                                <div class="row g-3 mb-4">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="nama_produk">Nama Produk
-                                                                            *</label><br>
-                                                                        <input type="text" class="form-control"
-                                                                            aria-label="Nama Produk">
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="harga">Gambar Produk
-                                                                            *</label><br>
-                                                                        <input type="file" class="form-control"
-                                                                            aria-label="Gambar Produk">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row g-3">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="harga">Harga *</label><br>
-                                                                        <input type="text" class="form-control"
-                                                                            aria-label="Harga" id="harga"
-                                                                            oninput="formatHarga(event)">
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="harga">Stok *</label><br>
-                                                                        <input type="text" class="form-control"
-                                                                            aria-label="Stok">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Batal</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">Simpan</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @if (Session::get('success'))
-                                            <p
-                                                style="padding: 5px 10px; background: green; color: white; margin: 10px">
-                                                {{ Session::get('success') }}</p>
-                                        @endif
                                     </div>
+                                    @if (Session::get('success'))
+                                    <p
+                                        style="padding: 5px 10px; background: green; color: white; margin: 10px">
+                                        {{ Session::get('success') }}</p>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" style="text-align: center">#</th>
-                                            <th scope="col">Customer Name</th>
-                                            <th scope="col">Sale Date</th>
-                                            <th scope="col">Total Price</th>
-                                            <th scope="col">Created By</th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row" style="text-align: center">1</th>
-                                            <td>cawan tomsketer</td>
-                                            <td>2027-07-27</td>
-                                            <td>Rp. 1.25jt</td>
-                                            <td>Admin</td>
-                                            <td><button type="button"
-                                                    class="btn btn-outline-warning mx-1">View</button></td>
-                                            <td><button type="button" class="btn btn-outline-info mx-1">Download Proof</button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row" style="text-align: center">2</th>
-                                            <td>Prabowo</td>
-                                            <td>2020-02-02</td>
-                                            <td>Rp. 210.000</td>
-                                            <td>Presiden</td>
-                                            <td><button type="button"
-                                                    class="btn btn-outline-warning mx-1">View</button></td>
-                                            <td><button type="button" class="btn btn-outline-info mx-1">Download Proof</button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row" style="text-align: center">3</th>
-                                            <td>Gibran</td>
-                                            <td>02-02-02</td>
-                                            <td>Rp. 2.020.202</td>
-                                            <td>Wakil Presiden</td>
-                                            <td><button type="button"
-                                                    class="btn btn-outline-warning mx-1">View</button></td>
-                                            <td><button type="button" class="btn btn-outline-info mx-1">Download Proof</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">#</th>
+                                        <th scope="col">Customer Name</th>
+                                        <th scope="col">Sale Date</th>
+                                        <th scope="col">Item & Quantity</th>
+                                        <th scope="col">Total Price</th>
+                                        <th scope="col">Payment</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($transaksis as $t)
+                                    <tr>
+                                        <th scope="row" style="text-align: center">{{ $loop->iteration }}</th>
+                                        <td>{{ $t->customer_name }}</td>
+                                        <td>{{ $t->created_at->format('d M Y') }}</td>
+                                        <td>
+                                            <span class="fw-bold">{{ $t->item_name }}</span> 
+                                            <span class="badge bg-light text-dark border ms-1">x{{ $t->quantity }}</span>
+                                        </td>
+                                        <td class="text-success fw-bold">Rp {{ number_format($t->total_price, 0, ',', '.') }}</td>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="mdi mdi-bitcoin"></i> {{ $t->payment_method }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button onclick="printReceipt('{{ $t->id }}', '{{ $t->customer_name }}', 'Rp {{ number_format($t->total_price, 0, ',', '.') }}', '{{ $t->item_name }} (x{{ $t->quantity }})')" class="btn btn-sm btn-outline-dark mx-1">
+                                                <i class="mdi mdi-printer"></i> Struk
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted p-4">No transactions found yet.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <!-- ============================================================== -->
-                    <!-- End PAge Content -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Right sidebar -->
-                    <!-- ============================================================== -->
-                    <!-- .right-sidebar -->
-                    <!-- ============================================================== -->
-                    <!-- End Right sidebar -->
-                    <!-- ============================================================== -->
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Container fluid  -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- footer -->
-                <!-- ============================================================== -->
-                <footer class="footer text-center">
-                    All Rights Reserved by Shiny Flakes. Designed and Developed by
-                    <a href="https://www.wrappixel.com">Azwan Maurizky</a>.
-                </footer>
-                <!-- ============================================================== -->
-                <!-- End footer -->
-                <!-- ============================================================== -->
+
+                </div>
+            <footer class="footer text-center">
+                All Rights Reserved by Shiny Flakes. Designed and Developed by
+                <a href="https://www.wrappixel.com">Azwan Maurizky</a>.
+            </footer>
             </div>
-            <!-- ============================================================== -->
-            <!-- End Page wrapper  -->
-            <!-- ============================================================== -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Wrapper -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- All Jquery -->
-        <!-- ============================================================== -->
-        <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-        <!-- Bootstrap tether Core JavaScript -->
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../assets/dist/js/app-style-switcher.js"></script>
-        <!--Wave Effects -->
-        <script src="../assets/dist/js/waves.js"></script>
-        <!--Menu sidebar -->
-        <script src="../assets/dist/js/sidebarmenu.js"></script>
-        <!--Custom JavaScript -->
-        <script src="../assets/dist/js/custom.js"></script>
-        <script>
-            var tooltipTriggerEl = document.getElementById('tooltipBtn');
-            var tooltip = new bootstrap.Tooltip(tooltipTriggerEl);
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/dist/js/app-style-switcher.js"></script>
+    <script src="../assets/dist/js/waves.js"></script>
+    <script src="../assets/dist/js/sidebarmenu.js"></script>
+    <script src="../assets/dist/js/custom.js"></script>
+    <script>
+        var tooltipTriggerEl = document.getElementById('tooltipBtn');
+        var tooltip = new bootstrap.Tooltip(tooltipTriggerEl);
 
-            tooltipTriggerEl.addEventListener('mouseenter', function() {
-                tooltip.show();
-            });
+        tooltipTriggerEl.addEventListener('mouseenter', function() {
+            tooltip.show();
+        });
 
-            tooltipTriggerEl.addEventListener('mouseleave', function() {
-                tooltip.hide();
-            });
-        </script>
+        tooltipTriggerEl.addEventListener('mouseleave', function() {
+            tooltip.hide();
+        });
+
+        // === FUNCTION CETAK STRUK SHINY FLAKES ===
+        function printReceipt(id, name, total, items) {
+            var mywindow = window.open('', 'PRINT', 'height=600,width=400');
+
+            mywindow.document.write('<html><head><title>Receipt #' + id + '</title>');
+            // Styling Struk
+            mywindow.document.write('<style>body{font-family: "Courier New", monospace; text-align: center; padding: 20px;} .line{border-bottom: 1px dashed #000; margin: 10px 0;} .text-left{text-align:left; float:left;} .text-right{text-align:right; float:right;} .row{clear:both; margin-bottom: 5px; overflow:hidden;} .title{font-weight:bold; font-size: 1.2em;}</style>');
+            mywindow.document.write('</head><body>');
+            
+            // Header
+            mywindow.document.write('<div class="title">SHINY FLAKES</div>');
+            mywindow.document.write('<p style="font-size:0.8em">Darknet Market St.<br>Berlin, Germany<br>Anonymous & Secure</p>');
+            mywindow.document.write('<div class="line"></div>');
+            
+            // Data
+            mywindow.document.write('<div class="row"><span class="text-left">Date:</span><span class="text-right">' + new Date().toLocaleDateString() + '</span></div>');
+            mywindow.document.write('<div class="row"><span class="text-left">Order ID:</span><span class="text-right">#' + id + '</span></div>');
+            mywindow.document.write('<div class="row"><span class="text-left">Customer:</span><span class="text-right">' + name + '</span></div>');
+            mywindow.document.write('<div class="line"></div>');
+            
+            // Items
+            mywindow.document.write('<div class="row"><span class="text-left">Product</span><span class="text-right">' + items + '</span></div>');
+            
+            mywindow.document.write('<div class="line"></div>');
+            
+            // Total
+            mywindow.document.write('<div class="row" style="font-weight:bold; font-size:1.1em"><span class="text-left">TOTAL</span><span class="text-right">' + total + '</span></div>');
+            mywindow.document.write('<div class="row"><span class="text-left">Payment:</span><span class="text-right">BITCOIN (Paid)</span></div>');
+            
+            mywindow.document.write('<div class="line"></div>');
+            mywindow.document.write('<p style="margin-top:20px;">Thank you for your business.<br>Be safe.</p>');
+            
+            // Auto Print
+            mywindow.document.write('<script>window.onload = function() { window.print(); window.close(); }<\/script>');
+            
+            mywindow.document.write('</body></html>');
+            mywindow.document.close(); 
+            mywindow.focus(); 
+        }
+    </script>
 </body>
 
 </html>
