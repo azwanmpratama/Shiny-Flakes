@@ -3,33 +3,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Transaction;
+use App\Models\Pembelian; // Pastikan Model Pembelian sudah ada
+use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
-    public function store(Request $request)
+    // Halaman Utama Shop
+    public function index()
     {
-        // 1. Bersihkan Data Harga
-        // Menghapus "Rp", titik, koma, spasi, dll. Hanya menyisakan angka.
-        $rawPrice = $request->total_price;
-        $cleanPrice = preg_replace('/[^0-9]/', '', $rawPrice);
+        // Kalau kamu ambil data dari DB, ubah array ini jadi Product::all();
+        // Ini contoh statis biar halaman shop-nya jalan dulu
+        $products = [
+            [
+                'id' => 1,
+                'name' => 'Shiny Flakes T-Shirt',
+                'price' => 150000,
+                'image' => 'tshirt.jpg'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Hoodie Black Edition',
+                'price' => 300000,
+                'image' => 'hoodie.jpg'
+            ]
+        ];
 
-        // 2. Simpan ke Database
+        return view('shop.index', compact('products'));
+    }
+
+    // Logic Checkout & Simpan ke DB (Sesuai yang bocor di screenshot kamu)
+    public function checkout(Request $request)
+    {
+        // 1. Bersihkan Format Rupiah (Rp 150.000 -> 150000)
+        $cleanPrice = (int) str_replace(['Rp ', '.'], '', $request->total_price);
+        
+        // 2. Cek User Login
+        $customerName = auth()->check() ? auth()->user()->name : 'Guest Customer';
+
+        // 3. Simpan ke Database
         try {
-            Transaction::create([
-                'customer_name' => 'Anonymous User', // Atau Auth::user()->name jika login
-                'item_name'     => $request->item_name,
-                'quantity'      => $request->quantity,
-                'total_price'   => $cleanPrice, // Masukkan harga yang sudah bersih
-                'payment_method'=> $request->payment_method,
-                'status'        => 'Paid (Verifying)'
+            $transaksi = Pembelian::create([
+                'nama_pembeli'   => $customerName,
+                'nama_barang'    => $request->item_name,
+                'qty'            => $request->quantity,
+                'total_harga'    => $cleanPrice,
+                'status'         => 'Paid',
+                'pembayaran'     => $request->payment_method,
+                'tanggal'        => now(),
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Success']);
-            
+            // Sukses: Kirim data balik ke JS untuk dicetak struk
+            return response()->json([
+                'status' => 'success', 
+                'data'   => $transaksi
+            ]);
+
         } catch (\Exception $e) {
-            // Jika masih error, kirim pesan error aslinya ke browser agar ketahuan
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            // Gagal
+            return response()->json([
+                'status'  => 'error', 
+                'message' => 'GAGAL SIMPAN KE DB: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

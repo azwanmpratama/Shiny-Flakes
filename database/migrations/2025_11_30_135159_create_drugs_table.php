@@ -10,15 +10,21 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
+    
     {
-
-    Schema::create('drugs', function (Blueprint $table) {
+    
+        Schema::create('drugs', function (Blueprint $table) {
         $table->id();
-        $table->string('name'); // Nama Barang (ex: Marijuana, AK-47)
-        $table->string('category')->nullable(); // Kategori
+        $table->string('name');
+        $table->bigInteger('price');
+        $table->integer('stock');
+        $table->string('image');
+        $table->string('tag')->default('PURE'); 
+        $table->text('description')->nullable();
+        $table->string('category')->nullable();
         $table->timestamps();
+    });
 
-        });
     }
 
     /**

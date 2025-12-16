@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Shiny Flakes</title>
     <link href="../assets/dist/css/stylelog.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
@@ -95,7 +96,7 @@
             
             <form action="{{ route('actionlogin') }}" method="POST" class="sign-in-form">
                 @csrf
-                <h2 class="title" style="color: #3F51B5;">Sign In</h2>
+                <h2 class="title" style="color: #3F51B5;">Sign In Form</h2>
                 
                 <div class="input-field">
                     <i class="fas fa-envelope"></i>

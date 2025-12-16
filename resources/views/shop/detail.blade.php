@@ -4,135 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail | Shiny Flakes</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        :root {
-            --primary: #3F51B5; /* Indigo */
-            --bg-body: #ffffff;
-            --bg-card: #F4F6F8;
-            --text-main: #111111;
-            --text-muted: #666666;
-            
-            /* Dark Mode Vars */
-            --bg-dark: #050505;
-            --card-dark: #121212;
-            --text-dark: #e0e0e0;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            transition: all 0.5s ease;
-        }
-
-        /* --- DARK MODE STYLES --- */
+        /* CSS UTAMA */
+        :root { --primary: #3F51B5; --bg-body: #ffffff; --text-main: #111111; --text-muted: #666666; --bg-dark: #050505; --text-dark: #e0e0e0; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: all 0.5s ease; }
         [data-bs-theme="dark"] body { background-color: var(--bg-dark); color: var(--text-dark); }
         [data-bs-theme="dark"] .navbar { background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; }
-        [data-bs-theme="dark"] .bg-soft { background-color: var(--card-dark) !important; }
         [data-bs-theme="dark"] .text-main { color: var(--text-dark) !important; }
-        [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select {
-            background-color: #222; border-color: #333; color: white;
-        }
-        [data-bs-theme="dark"] .qty-btn { background: #333; color: white; }
-        [data-bs-theme="dark"] .breadcrumb-item a { color: #888; }
         [data-bs-theme="dark"] .modal-content { background-color: #1a1a1a; border: 1px solid #333; color: white; }
         [data-bs-theme="dark"] .btn-close { filter: invert(1); }
-        [data-bs-theme="dark"] .offcanvas { background-color: var(--card-dark); color: var(--text-dark); }
-
-        /* --- NAVBAR --- */
-        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid transparent; transition: 0.5s; }
-        .nav-link { font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; color: var(--text-main) !important; }
-        .nav-link:hover { color: var(--primary) !important; }
-        .logo-text { font-weight: 900; letter-spacing: -1px; font-size: 1.5rem; color: var(--primary); }
-
-        /* --- PRODUCT GALLERY --- */
-        .gallery-container {
-            background-color: var(--bg-card);
-            border-radius: 30px;
-            padding: 40px;
-            text-align: center;
-            height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .main-img {
-            max-width: 100%; height: 450px; object-fit: contain;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
-            transition: 0.5s;
-        }
-        .main-img:hover { transform: scale(1.05); }
-        
-        .thumb-list { display: flex; gap: 15px; margin-top: 30px; }
-        .thumb-item { 
-            width: 70px; height: 70px; border-radius: 15px; 
-            background: white; padding: 5px; cursor: pointer; 
-            border: 2px solid transparent; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .thumb-item img { width: 100%; height: 100%; object-fit: contain; }
-        .thumb-item:hover, .thumb-item.active { border-color: var(--primary); transform: translateY(-3px); }
-        [data-bs-theme="dark"] .thumb-item { background: #222; }
-
-        /* --- PRODUCT INFO --- */
-        .badge-stock { background: #e0f2f1; color: #00695c; padding: 5px 15px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
-        [data-bs-theme="dark"] .badge-stock { background: #004d40; color: #80cbc4; }
-        
-        .product-title { font-weight: 800; font-size: 2.5rem; margin-top: 15px; margin-bottom: 10px; line-height: 1.1; }
-        .product-price { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
-        
-        /* Selectors */
-        .option-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        
-        .size-selector input { display: none; }
-        .size-selector label {
-            display: inline-block; width: 45px; height: 45px; line-height: 43px; text-align: center;
-            border: 1px solid #ddd; border-radius: 12px; margin-right: 8px; cursor: pointer;
-            font-weight: 600; transition: 0.2s;
-        }
-        .size-selector input:checked + label { background-color: var(--primary); color: white; border-color: var(--primary); }
-        [data-bs-theme="dark"] .size-selector label { border-color: #333; color: #ccc; }
-
-        /* Qty & Buttons */
-        .qty-wrapper {
-            display: flex; align-items: center; background: white; border: 1px solid #eee; 
-            border-radius: 50px; padding: 5px; width: fit-content;
-        }
-        [data-bs-theme="dark"] .qty-wrapper { background: #222; border-color: #333; }
-        
-        .qty-btn { 
-            width: 35px; height: 35px; border-radius: 50%; border: none; 
-            background: #f8f9fa; font-weight: bold; transition: 0.2s; 
-        }
-        .qty-btn:hover { background: var(--primary); color: white; }
-        .qty-input { width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; color: inherit; }
-
-        .btn-buy {
-            background-color: var(--primary); color: white; border: none;
-            padding: 15px 40px; border-radius: 50px; font-weight: 700;
-            font-size: 1rem; box-shadow: 0 10px 20px rgba(63, 81, 181, 0.3);
-            transition: 0.3s; flex-grow: 1;
-        }
-        .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(63, 81, 181, 0.5); background-color: #303f9f; color: white;}
-
-        /* --- MODAL PAYMENT --- */
-        .crypto-option {
-            border: 2px solid #eee; border-radius: 15px; padding: 15px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s;
-        }
-        .crypto-option:hover, .crypto-option.active { border-color: var(--primary); background-color: rgba(63, 81, 181, 0.05); }
-        [data-bs-theme="dark"] .crypto-option { border-color: #333; }
-        [data-bs-theme="dark"] .crypto-option.active { background-color: rgba(63, 81, 181, 0.2); }
-        
-        .wallet-address { font-family: monospace; font-size: 0.9rem; background: #eee; padding: 10px; border-radius: 8px; word-break: break-all; }
+        [data-bs-theme="dark"] .form-check-input:checked { background-color: var(--primary); border-color: var(--primary); }
         [data-bs-theme="dark"] .wallet-address { background: #000; border: 1px solid #333; color: #0f0; }
-
-        /* Animation */
+        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid transparent; transition: 0.5s; }
+        .nav-link { font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; color: var(--text-main) !important; }
+        .logo-icon { height: 40px; width: auto; margin-right: 10px; }
+        .logo-text { height: 30px; width: auto; margin-top: 3px; }
+        [data-bs-theme="dark"] .logo-text { filter: invert(1) brightness(2); }
+        .image-gallery { background-color: #f9f9f9; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; }
+        [data-bs-theme="dark"] .image-gallery { background-color: #1a1a1a; border: 1px solid #333; }
+        .main-img { width: 100%; height: auto; max-height: 450px; object-fit: contain; border-radius: 15px; margin-bottom: 20px; }
+        .thumb-list { display: flex; gap: 10px; justify-content: start; }
+        .thumb-item { width: 70px; height: 70px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: 0.2s; opacity: 0.7; background-color: #fff; }
+        [data-bs-theme="dark"] .thumb-item { background-color: #2a2a2a; border: 1px solid #444; }
+        .thumb-item.active, .thumb-item:hover { border-color: var(--primary); opacity: 1; }
+        .thumb-item img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+        .product-title { font-weight: 800; font-size: 2.5rem; margin-bottom: 10px; line-height: 1.1; }
+        .product-price { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
+        .btn-buy { background-color: var(--primary); color: white; border: none; padding: 15px 0; width: 100%; border-radius: 50px; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 20px rgba(63, 81, 181, 0.3); transition: 0.3s; }
+        .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(63, 81, 181, 0.5); }
+        .qty-wrapper { display: flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; padding: 5px; width: 120px; justify-content: space-between; }
+        [data-bs-theme="dark"] .qty-wrapper { border-color: #333; }
+        .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: none; background: transparent; font-weight: bold; color: inherit; }
+        .qty-input { width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; color: inherit; }
+        .size-label { display: inline-block; width: 50px; height: 50px; line-height: 48px; text-align: center; border: 1px solid #ddd; border-radius: 10px; margin-right: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        input:checked + .size-label { background-color: var(--primary); color: white; border-color: var(--primary); }
+        [data-bs-theme="dark"] .size-label { border-color: #333; color: #888; }
+        .crypto-option { border: 2px solid #eee; border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .crypto-option.active { border-color: var(--primary); background-color: rgba(63, 81, 181, 0.05); }
+        [data-bs-theme="dark"] .crypto-option { border-color: #333; }
+        .wallet-address { font-family: monospace; font-size: 0.9rem; background: #eee; padding: 10px; border-radius: 8px; word-break: break-all; }
         .fade-in { animation: fadeIn 0.6s ease forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CUSTOM DROPDOWN SHINY STYLE --- */
+        .dropdown-menu { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(63, 81, 181, 0.1); border-radius: 16px; padding: 10px; min-width: 220px; box-shadow: 0 10px 40px rgba(63, 81, 181, 0.15); margin-top: 15px !important; animation: slideDown 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .dropdown-header { color: #3f51b5; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; padding: 8px 16px; margin-bottom: 5px; }
+        .dropdown-divider { border-top: 1px solid rgba(63, 81, 181, 0.1); margin: 5px 0; }
+        .dropdown-item { border-radius: 10px; padding: 10px 16px; font-weight: 600; color: #555; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; }
+        .dropdown-item:hover { background: rgba(63, 81, 181, 0.08); color: #3f51b5; transform: translateX(5px); }
+        .dropdown-item i { font-size: 1.2rem; color: #3f51b5; transition: 0.2s; }
+        .dropdown-item.text-danger { color: #ff4757; }
+        .dropdown-item.text-danger:hover { background: rgba(255, 71, 87, 0.1); color: #ff4757; }
+        .dropdown-item.text-danger i { color: #ff4757; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .dropdown-menu::before { content: ''; position: absolute; top: -6px; right: 20px; width: 12px; height: 12px; background: white; transform: rotate(45deg); border-left: 1px solid rgba(63, 81, 181, 0.1); border-top: 1px solid rgba(63, 81, 181, 0.1); }
     </style>
 </head>
 <body>
@@ -144,70 +76,94 @@
                 <span class="text-main fw-bold" style="font-size: 0.9rem;">BACK TO SHOP</span>
             </a>
             
-            <div class="d-flex align-items-center gap-3">
-                <span class="logo-text d-none d-md-block" id="navBrandText">SHINY FLAKES</span>
+            <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                <img src="{{ asset('assets/images/shinyflakes-icon 1.png') }}" class="logo-icon" alt="Icon">
+                <img src="{{ asset('assets/images/logo-text.png') }}" class="logo-text" id="logoText" alt="Logo">
             </div>
 
             <div class="d-flex align-items-center gap-4">
-                <a href="#" class="nav-link position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                @guest
+                    <a href="{{ route('login') }}" class="nav-link" title="Login">
+                        <i class="mdi mdi-account-outline fs-4"></i>
+                    </a>
+                @else
+                    <div class="dropdown">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="mdi mdi-account-check fs-4 text-primary"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Hi, {{ Auth::user()->name }}</h6></li>
+                            
+                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'kasir')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <i class="mdi mdi-view-dashboard-outline"></i> 
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ route('actionlogout') }}">
+                                    <i class="mdi mdi-logout-variant"></i> 
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endguest
+                
+                <a href="#" class="nav-link position-relative">
                     <i class="mdi mdi-shopping-outline fs-4"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">2</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">0</span>
                 </a>
             </div>
         </div>
     </nav>
 
     <div class="container" style="margin-top: 100px; margin-bottom: 80px;">
-        <nav aria-label="breadcrumb" class="mb-4">
+        <nav aria-label="breadcrumb" class="mb-4 fade-in">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Shop</a></li>
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted" id="breadCat">Apparel</a></li>
-                <li class="breadcrumb-item active" aria-current="page" id="breadName">Jacket</li>
+                <li class="breadcrumb-item"><a href="{{ route('shop.index') }}" class="text-decoration-none text-muted">Shop</a></li>
+                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted" id="breadCat">Category</a></li>
+                <li class="breadcrumb-item active" aria-current="page" id="breadName">Loading...</li>
             </ol>
         </nav>
 
-        <div class="row align-items-center">
+        <div class="row align-items-start">
             <div class="col-lg-6 mb-5 mb-lg-0 fade-in">
-                <div class="gallery-container bg-soft">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=600&q=80" id="mainImage" class="main-img">
-                    
+                <div class="image-gallery">
+                    <img src="" id="mainImage" class="main-img" alt="Product Image">
                     <div class="thumb-list">
                         <div class="thumb-item active" onclick="changeImage(this)">
-                            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=150&q=80" id="thumb1">
+                            <img src="" id="thumb1" alt="Front">
                         </div>
                         <div class="thumb-item" onclick="changeImage(this)">
-                            <img src="https://images.unsplash.com/photo-1551488852-0801751ac367?auto=format&fit=crop&w=150&q=80" id="thumb2">
-                        </div>
-                        <div class="thumb-item" onclick="changeImage(this)">
-                            <img src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=150&q=80" id="thumb3">
+                            <img src="" id="thumb2" alt="Back">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-6 ps-lg-5 fade-in" style="animation-delay: 0.2s;">
-                <span class="badge-stock mb-2 d-inline-block">In Stock</span>
-                <h1 class="product-title text-main" id="prodName">Technical Bomber V3</h1>
+                <span class="badge bg-success bg-opacity-10 text-success mb-2 px-3 py-2 rounded-pill fw-bold">In Stock</span>
+                
+                <h1 class="product-title text-main" id="prodName">Loading...</h1>
+                
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    <div class="text-warning small">
-                        <i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i>
-                    </div>
+                    <div class="text-warning small"><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i><i class="mdi mdi-star"></i></div>
                     <span class="text-muted small">(450 Reviews)</span>
                 </div>
-                <h2 class="product-price" id="prodPrice">Rp 2.500.000</h2>
+                
+                <h2 class="product-price" id="prodPrice">Rp 0</h2>
 
-                <p class="text-muted mb-4" id="prodDesc">
-                    Premium quality bomber jacket with water-resistant material. Designed for urban exploration and maximum comfort. Features multiple pockets and a sleek silhouette.
-                </p>
+                <p class="text-muted mb-4" id="prodDesc">Loading description...</p>
 
                 <div class="mb-4">
-                    <span class="option-title" id="optionTitle">Select Size</span>
-                    <div class="size-selector" id="optionContainer">
-                        <input type="radio" name="size" id="s" checked><label for="s">S</label>
-                        <input type="radio" name="size" id="m"><label for="m">M</label>
-                        <input type="radio" name="size" id="l"><label for="l">L</label>
-                        <input type="radio" name="size" id="xl"><label for="xl">XL</label>
-                    </div>
+                    <span class="fw-bold d-block mb-2 text-main" id="optionTitle">Select Size</span>
+                    <div id="optionContainer" class="d-flex flex-wrap gap-2"></div>
                 </div>
 
                 <div class="d-flex gap-3 align-items-center pb-4 border-bottom border-secondary border-opacity-10">
@@ -216,12 +172,16 @@
                         <input type="text" class="qty-input" id="qty" value="1" readonly>
                         <button class="qty-btn" onclick="inc()">+</button>
                     </div>
-                    <button class="btn-buy" data-bs-toggle="modal" data-bs-target="#paymentModal">
-                        <i class="mdi mdi-flash me-2"></i> BUY NOW
-                    </button>
-                    <button class="btn btn-outline-secondary rounded-circle" style="width: 50px; height: 50px;">
-                        <i class="mdi mdi-heart-outline"></i>
-                    </button>
+
+                    @auth
+                        <button class="btn-buy" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                            <i class="mdi mdi-flash me-2"></i> BUY NOW
+                        </button>
+                    @else
+                        <button class="btn-buy" onclick="forceLogin()">
+                            <i class="mdi mdi-login me-2"></i> LOGIN TO BUY
+                        </button>
+                    @endauth
                 </div>
 
                 <div class="mt-4 d-flex align-items-center gap-3">
@@ -237,33 +197,25 @@
 
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-content rounded-4 shadow-lg">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold text-main"><i class="mdi mdi-lock text-primary"></i> Secure Payment</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4 pt-2">
                     <p class="text-muted small mb-4">Select your preferred blockchain network:</p>
-                    
                     <div class="d-flex gap-3 mb-4">
                         <div class="crypto-option active flex-grow-1" id="opt-btc" onclick="selectCoin('btc')">
                             <i class="mdi mdi-bitcoin fs-3 text-warning"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-main">Bitcoin</h6>
-                                <small class="text-muted">BTC Network</small>
-                            </div>
+                            <div><h6 class="mb-0 fw-bold text-main">Bitcoin</h6><small class="text-muted">BTC Network</small></div>
                         </div>
                         <div class="crypto-option flex-grow-1" id="opt-eth" onclick="selectCoin('eth')">
                             <i class="mdi mdi-ethereum fs-3 text-primary"></i>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-main">Ethereum</h6>
-                                <small class="text-muted">ERC20</small>
-                            </div>
+                            <div><h6 class="mb-0 fw-bold text-main">Ethereum</h6><small class="text-muted">ERC20</small></div>
                         </div>
                     </div>
-
-                    <div class="text-center p-3 rounded-3 mb-3 bg-soft">
-                        <h3 class="fw-bold text-main" id="modalPrice">Rp 2.500.000</h3>
+                    <div class="text-center p-3 rounded-3 mb-3" style="background: rgba(63, 81, 181, 0.05);">
+                        <h3 class="fw-bold text-main" id="modalPrice">Rp 0</h3>
                         <div class="bg-white p-2 d-inline-block rounded mb-3 border">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" width="120" id="qrImage">
                         </div>
@@ -273,177 +225,206 @@
                             <button class="btn btn-sm btn-outline-secondary" onclick="copyAddr()"><i class="mdi mdi-content-copy"></i></button>
                         </div>
                     </div>
-
-                    <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold" onclick="confirmPayment()">I Have Sent Payment</button>
+                    <button class="btn btn-buy w-100 py-3 rounded-pill fw-bold" onclick="confirmPayment()">I Have Sent Payment</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
-        <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title fw-bold text-main">Shopping Bag</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column justify-content-center align-items-center text-muted">
-            <i class="mdi mdi-shopping-outline fs-1 mb-3 opacity-50"></i>
-            <p>Your bag is empty.</p>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- LOGIC DETEKSI MODE (MAGIC HAPPENS HERE) ---
-        window.onload = function() {
-            // Cek status dari LocalStorage (yang diset di halaman Index)
-            const isDrugMode = localStorage.getItem('shinyMode') === 'true';
-            
-            if(isDrugMode) {
-                enableDrugMode();
-            } else {
-                enableFashionMode();
-            }
-        };
+    // Listener Scroll Navbar
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    });
 
-        function enableDrugMode() {
-            // 1. Set Tema Gelap
-            document.documentElement.setAttribute('data-bs-theme', 'dark');
-            
-            // 2. Ubah Konten Teks
-            document.getElementById('navBrandText').innerText = "THE MARKET";
-            document.getElementById('breadCat').innerText = "Substances";
-            document.getElementById('breadName').innerText = "Pills";
-            document.getElementById('prodName').innerText = "Shiny Flakes XTC (240mg)";
-            document.getElementById('prodPrice').innerText = "Rp 450.000";
-            document.getElementById('modalPrice').innerText = "Rp 450.000";
-            document.getElementById('prodDesc').innerText = "High purity MDMA press. Imported directly from NL laboratories. Vacuum sealed and stealth shipping guaranteed. Use responsibly.";
-            
-            // 3. Ubah Gambar (Gunakan Asset Lokal Anda)
-            // Ganti URL ini dengan {{ asset('assets/images/drug/d1.png') }} dsb
-            const drugImg = "{{ asset('assets/images/drug/d1.png') }}";
-            document.getElementById('mainImage').src = drugImg;
-            document.getElementById('thumb1').src = drugImg;
-            document.getElementById('thumb2').src = "{{ asset('assets/images/drug/d1.png') }}"; // Ganti variasi lain
-            document.getElementById('thumb3').src = "{{ asset('assets/images/drug/d1.png') }}";
+    // --- DATASET DINAMIS DARI DATABASE ---
+    const fakeProducts = @json($fashionProducts ?? []);
+    const realProducts = @json($realProducts ?? []);
 
-            // 4. Ubah Pilihan (Size jadi Jumlah)
-            document.getElementById('optionTitle').innerText = "Select Package";
-            document.getElementById('optionContainer').innerHTML = `
-                <input type="radio" name="size" id="s" checked><label for="s" style="width:auto; padding:0 15px;">5pcs</label>
-                <input type="radio" name="size" id="m"><label for="m" style="width:auto; padding:0 15px;">10pcs</label>
-                <input type="radio" name="size" id="l"><label for="l" style="width:auto; padding:0 15px;">25pcs</label>
-                <input type="radio" name="size" id="xl"><label for="xl" style="width:auto; padding:0 15px;">50pcs</label>
-            `;
-        }
+    // --- MENU CONFIG ---
+    const menuFashion = `
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('New')">New Arrivals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Jacket')">Jackets</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Denim')">Denim</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('T-Shirt')">T-Shirt</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Tracksuit')">Tracksuit</a></li>
+    `;
 
-        function enableFashionMode() {
-            document.documentElement.setAttribute('data-bs-theme', 'light');
-            // Konten default HTML sudah Fashion, jadi tidak perlu diubah banyak
-        }
+    const menuReal = `
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Cocaine')">Stimulants</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Crystal')">Crystals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Emoji')">Pills / XTC</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Xanax')">Pharma</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('LSD')">Psychedelics</a></li>
+    `;
 
-        // --- INTERAKSI LAIN ---
-        function changeImage(el) {
-            document.getElementById('mainImage').src = el.querySelector('img').src;
-            document.querySelectorAll('.thumb-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
+    let clickCount = 0;
+    let clickTimer;
+    let isRealMode = false;
+    const htmlElement = document.documentElement;
 
-        function inc() { document.getElementById('qty').value++; }
-        function desc() { let v = document.getElementById('qty'); if(v.value > 1) v.value--; }
-
-        function selectCoin(coin) {
-            document.querySelectorAll('.crypto-option').forEach(el => el.classList.remove('active'));
-            document.getElementById('opt-' + coin).classList.add('active');
-            
-            if(coin === 'btc') {
-                document.getElementById('walletAddr').innerText = "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh";
-                document.getElementById('qrImage').src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh";
-            } else {
-                document.getElementById('walletAddr').innerText = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
-                document.getElementById('qrImage').src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
-            }
-        }
-
-        function copyAddr() {
-            const text = document.getElementById('walletAddr').innerText;
-            navigator.clipboard.writeText(text);
-            const Toast = Swal.mixin({
-                toast: true, position: 'top-end', showConfirmButton: false, timer: 2000,
-                background: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#333' : '#fff',
-                color: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#fff' : '#000'
+    // FUNGSI RENDER KARTU
+    function renderProducts(products) {
+        const container = document.getElementById('productContainer');
+        
+        // Animasi Keluar
+        const cards = container.querySelectorAll('.product-col');
+        cards.forEach((col, index) => { setTimeout(() => { col.classList.add('flipping-out'); }, index * 30); });
+        
+        setTimeout(() => {
+            container.innerHTML = '';
+            products.forEach((p) => {
+                const col = createCard(p);
+                col.classList.add('prepare-flip-in');
+                container.appendChild(col);
             });
-            Toast.fire({ icon: 'success', title: 'Address Copied!' });
-        }
-
-        function confirmPayment() {
-        // Ambil data dari halaman
-        // Kita perlu tahu mode apa yang sedang aktif (Fashion/Drug)
-        const isDrugMode = localStorage.getItem('shinyMode') === 'true';
-        
-        let itemName, itemPrice;
-        
-        if (isDrugMode) {
-            itemName = "Shiny Flakes XTC (240mg)"; // Sesuai mode drug
-            itemPrice = "450000"; // Harga satuan
-        } else {
-            itemName = "Technical Bomber V3"; // Sesuai mode fashion
-            itemPrice = "2500000"; // Harga satuan
-        }
-
-        const qty = document.getElementById('qty').value;
-        // Hitung total harga dasar x jumlah
-        const totalPrice = parseInt(itemPrice) * parseInt(qty);
-        
-        // Cek coin mana yang aktif
-        const coin = document.querySelector('.crypto-option.active h6').innerText;
-
-        // Tutup Modal Bootstrap
-        var myModalEl = document.getElementById('paymentModal');
-        var modal = bootstrap.Modal.getInstance(myModalEl);
-        modal.hide();
-
-        // 1. Tampilkan Loading SweetAlert
-        Swal.fire({
-            title: 'Verifying Payment',
-            html: 'Scanning blockchain network... please wait.',
-            timerProgressBar: true,
-            didOpen: () => { Swal.showLoading() },
-            background: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#1a1a1a' : '#fff',
-            color: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#fff' : '#000'
-        });
-
-        // 2. Kirim Data ke Laravel via AJAX (Fetch)
-        fetch("{{ route('shop.checkout') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}" // Token keamanan wajib Laravel
-            },
-            body: JSON.stringify({
-                item_name: itemName,
-                quantity: qty,
-                total_price: totalPrice,
-                payment_method: coin
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // 3. Tampilkan Sukses jika berhasil
-            Swal.fire({
-                icon: 'success',
-                title: 'Payment Received',
-                text: 'Your order has been secured in our database.',
-                confirmButtonColor: '#3F51B5',
-                background: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#1a1a1a' : '#fff',
-                color: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#fff' : '#000',
+            
+            // Animasi Masuk
+            const newCards = container.querySelectorAll('.product-col');
+            newCards.forEach((col, index) => {
+                void col.offsetWidth;
+                setTimeout(() => { col.classList.remove('prepare-flip-in'); }, index * 30);
             });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('Error', 'Something went wrong', 'error');
-        });
+        }, 600);
     }
-    
-    </script>
+
+    function createCard(p) {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-3 product-col'; 
+        col.innerHTML = getCardHTML(p);
+        return col;
+    }
+
+    function getCardHTML(p) {
+        const url = "{{ url('/shop/detail') }}/" + p.id;
+        // Badge: Kalau mode obat, warnanya merah
+        const badgeColor = isRealMode ? 'background: #d32f2f;' : '';
+        const badge = p.tag ? `<div class="discount-badge" style="${badgeColor}">${p.tag}</div>` : '';
+        
+        return `
+            <div class="product-card" onclick="window.location.href='${url}'">
+                ${badge}
+                <div class="img-container">
+                    <img src="${p.imgFront}" class="prod-img img-main" alt="${p.name}">
+                    <img src="${p.imgBack}" class="prod-img img-hover" alt="${p.name} Back">
+                </div>
+                <div class="action-overlay">
+                    <button class="action-btn"><i class="mdi mdi-heart-outline"></i></button>
+                    <button class="action-btn"><i class="mdi mdi-cart-outline"></i></button>
+                    <button class="action-btn"><i class="mdi mdi-arrow-right"></i></button>
+                </div>
+                <div class="prod-info">
+                    <h5 class="prod-title text-truncate">${p.name}</h5>
+                    <p class="prod-price">${p.price}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateNavbar() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.classList.add('changing'); 
+        setTimeout(() => {
+            navMenu.innerHTML = isRealMode ? menuReal : menuFashion;
+            navMenu.classList.remove('changing');
+        }, 400); 
+    }
+
+    function scrollToProduct(keyword) {
+        event.preventDefault();
+        const titles = document.querySelectorAll('.prod-title');
+        let targetElement = null;
+        for (let title of titles) {
+            if (title.textContent.toUpperCase().includes(keyword.toUpperCase())) {
+                targetElement = title.closest('.product-col');
+                break; 
+            }
+        }
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const card = targetElement.querySelector('.product-card');
+            card.style.transition = "transform 0.3s";
+            card.style.transform = "scale(1.05)";
+            setTimeout(() => { card.style.transform = "scale(1)"; }, 500);
+        }
+    }
+
+    function triggerFlash() {
+        const flash = document.getElementById('flashOverlay');
+        flash.style.opacity = '1';
+        flash.style.background = isRealMode ? '#d32f2f' : 'white'; // Flash Merah pas masuk mode obat
+        setTimeout(() => { flash.style.opacity = '0'; }, 500);
+    }
+
+    // --- INISIALISASI ---
+    // Cek mode terakhir dari LocalStorage
+    const savedMode = localStorage.getItem('shinyMode') === 'true';
+    isRealMode = savedMode;
+
+    if(isRealMode) {
+        // SET MODE: RED/DARK (SAAT LOAD)
+        renderProducts(realProducts);
+        document.getElementById('navMenu').innerHTML = menuReal;
+        htmlElement.setAttribute('data-bs-theme', 'dark');
+        htmlElement.style.setProperty('--primary', '#d32f2f'); // UBAH VAR BIRU JADI MERAH
+        
+        // Setup Hero
+        document.getElementById('heroTag').innerText = "RESTRICTED AREA";
+        document.getElementById('heroTag').style.backgroundColor = "#d32f2f"; 
+        document.getElementById('heroTitle').innerHTML = "PREMIUM<br>SUBSTANCES";
+        document.getElementById('heroBg').style.backgroundImage = "url('https://zinniahealth.com/_next/image?url=https%3A%2F%2Fcdn.zinniahealth.com%2Fwp-content%2Fuploads%2F20230726112257%2Fshutterstock_2107289702.jpg&w=3840&q=75')";
+    } else {
+        // SET MODE: BLUE/LIGHT (SAAT LOAD)
+        renderProducts(fakeProducts);
+        document.getElementById('navMenu').innerHTML = menuFashion;
+        htmlElement.setAttribute('data-bs-theme', 'light');
+        htmlElement.style.setProperty('--primary', '#3F51B5'); // DEFAULT BIRU
+    }
+
+    // --- LOGIKA TRIGGER (KLIK 5X) ---
+    document.getElementById('secretTrigger').addEventListener('click', function() {
+        clickCount++;
+        clearTimeout(clickTimer);
+
+        if (clickCount === 5) {
+            clickCount = 0;
+            isRealMode = !isRealMode;
+            localStorage.setItem('shinyMode', isRealMode);
+            
+            triggerFlash();
+            updateNavbar(); 
+
+            if(isRealMode) {
+                // MASUK MODE OBAT (GANTI MERAH)
+                renderProducts(realProducts);
+                setTimeout(() => {
+                    htmlElement.setAttribute('data-bs-theme', 'dark');
+                    htmlElement.style.setProperty('--primary', '#d32f2f'); // WARNA JADI MERAH
+                    
+                    document.getElementById('heroTag').innerText = "RESTRICTED AREA";
+                    document.getElementById('heroTag').style.backgroundColor = "#d32f2f"; 
+                    document.getElementById('heroTitle').innerHTML = "PREMIUM<br>SUBSTANCES";
+                    document.getElementById('heroBg').style.backgroundImage = "url('https://zinniahealth.com/_next/image?url=https%3A%2F%2Fcdn.zinniahealth.com%2Fwp-content%2Fuploads%2F20230726112257%2Fshutterstock_2107289702.jpg&w=3840&q=75')";
+                }, 300);
+            } else {
+                // BALIK MODE FASHION (GANTI BIRU)
+                renderProducts(fakeProducts);
+                setTimeout(() => {
+                    htmlElement.setAttribute('data-bs-theme', 'light');
+                    htmlElement.style.setProperty('--primary', '#3F51B5'); // BALIK BIRU
+                    
+                    document.getElementById('heroTag').innerText = "New Collection";
+                    document.getElementById('heroTag').style.backgroundColor = ""; 
+                    document.getElementById('heroTitle').innerHTML = "DIVIN<br>BY DIVIN";
+                    document.getElementById('heroBg').style.backgroundImage = "url('https://divinbydivin.com/cdn/shop/files/KEY_VISUAL.png?v=1764059568&width=1800')";
+                }, 300);
+            }
+        } else {
+            clickTimer = setTimeout(() => { clickCount = 0; }, 800);
+        }
+    });
+</script>
 </body>
 </html>

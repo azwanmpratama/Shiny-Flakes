@@ -4,108 +4,64 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProdukController extends Controller
 {
     public function index()
     {
-        $produks = Produk::orderBy('created_at','DESC')->get();
+        $produks = Produk::orderBy('created_at', 'desc')->get();
         return view('produk.produk', compact('produks'));
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'nama_produk' => 'required',
-        'harga' => 'required|numeric',
-        'stok' => 'required|integer',
-        'image' => 'required|image|mimes:jpg,jpeg,png,svg',
-    ]);
-
-    // Simpan gambar ke penyimpanan file Laravel
-    $imagePath = $request->file('image')->store('public/produk_images');
-
-    // Ambil nama file gambar
-    $imageName = basename($imagePath);
-
-    // Tambah data ke database
-    Produk::create([
-       'nama_produk' => $request->nama_produk,
-       'harga' => $request->harga,
-       'stok' => $request->stok,
-       'image' => $imageName, // Simpan nama file gambar ke dalam kolom 'image'
-    ]);
-
-    // Mengirimkan data produk ke tampilan 'produk'
-    return redirect()->route('indexProduk')->with('successAdd', 'Berhasil menambahkan produk!');
-}
-
-
-    public function create()
     {
-    //
-    }
+        $request->validate([
+            'nama_produk' => 'required',
+            'harga' => 'required',
+            'stok' => 'required|integer',
+            'image' => 'required|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'image_back' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048', // Validasi gambar ke-2
+        ]);
 
+        $cleanHarga = str_replace('.', '', $request->harga);
 
-    public function show($id)
-    {
+        // 1. Upload Gambar Depan
+        $imageName = time() . '_front_' . $request->image->getClientOriginalName();
+        $request->image->move(public_path('assets/images/products'), $imageName);
 
-    }
-
-    public function update(Request $request, $id)
-    {
-        $produk = Produk::find($id);
-        if ($produk) {
-            $validatedData = $request->validate([
-                'nama' => 'required',
-                'harga' => 'required|numeric',
-                'stok' => 'required|numeric',
-            ]);
-
-            $produk->update($validatedData);
-
-            return response()->json($produk, 200);
-        } else {
-            return response()->json(['message' => 'Produk tidak ditemukan.'], 404);
+        // 2. Upload Gambar Belakang (Jika Ada)
+        $imageBackName = null;
+        if ($request->hasFile('image_back')) {
+            $imageBackName = time() . '_back_' . $request->image_back->getClientOriginalName();
+            $request->image_back->move(public_path('assets/images/products'), $imageBackName);
         }
+
+        // 3. Simpan
+        Produk::create([
+           'name' => $request->nama_produk, 
+           'price' => $cleanHarga,
+           'stock' => $request->stok,               
+           'image' => $imageName,
+           'image_back' => $imageBackName, // Simpan nama file belakang (bisa null)
+           'tag' => 'NEW', 
+           'description' => 'Premium authentic streetwear designed for comfort.'
+        ]);
+
+        return redirect()->route('indexProduk')->with('successAdd', 'Product added successfully!');
     }
 
     public function destroy($id)
     {
         $produk = Produk::find($id);
         if ($produk) {
+            if(File::exists(public_path('assets/images/products/' . $produk->image))){
+                File::delete(public_path('assets/images/products/' . $produk->image));
+            }
             $produk->delete();
-            return response()->json(['message' => 'Produk berhasil dihapus.'], 200);
+            return redirect()->route('indexProduk')->with('successAdd', 'Product deleted successfully.');
         } else {
-            return response()->json(['message' => 'Produk tidak ditemukan.'], 404);
-        }
-    }
-
-    public function trash()
-    {
-        $deletedProduks = Produk::onlyTrashed()->get();
-        return response()->json($deletedProduks);
-    }
-
-    public function restore($id)
-    {
-        $restoredProduk = Produk::withTrashed()->find($id);
-        if ($restoredProduk) {
-            $restoredProduk->restore();
-            return response()->json(['message' => 'Produk berhasil dipulihkan.'], 200);
-        } else {
-            return response()->json(['message' => 'Produk tidak ditemukan dalam sampah.'], 404);
-        }
-    }
-
-    public function permanentDelete($id)
-    {
-        $deletedProduk = Produk::withTrashed()->find($id);
-        if ($deletedProduk) {
-            $deletedProduk->forceDelete();
-            return response()->json(['message' => 'Produk berhasil dihapus permanen.'], 200);
-        } else {
-            return response()->json(['message' => 'Produk tidak ditemukan dalam sampah.'], 404);
+            return redirect()->route('indexProduk')->with('error', 'Product not found.');
         }
     }
 }

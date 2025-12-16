@@ -5,49 +5,54 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class LoginController extends Controller
 {
     public function index()
     {
-        // Tambahkan logika untuk halaman login di sini
+        if (Auth::check()) {
+            // Jika sudah login, cek role untuk redirect yang benar
+            $user = Auth::user();
+            if ($user->role == 'admin' || $user->role == 'kasir') {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('shop.index');
+            }
+        }
         return view('auth.login');
     }
 
     public function actionlogin(Request $request)
-{
-    // Validasi form
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    {
+        $data = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
-        // Ambil data email dan password dari form login
-        $credentials = $request->only('email', 'password');
+        // Coba Login
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
 
-    // Lakukan proses autentikasi dengan menggunakan credentials
-    if (Auth::attempt($credentials)) {
-        // #$request->session()->regenerate();
-        // Jika autentikasi berhasil, arahkan pengguna ke halaman sesuai dengan peran (role) pengguna
-        if (Auth::user()->role == 'admin') {
-            return redirect()->route('dashboard');
-        } elseif (Auth::user()->role == 'kasir') {
-            return redirect()->route('dashboard');
+            // --- LOGIKA PENGARAHAN (REDIRECT) ---
+            if ($user->role == 'admin' || $user->role == 'kasir') {
+                // Jika Admin/Kasir -> Masuk Dashboard Admin
+                return redirect()->route('dashboard');
+            } else {
+                // Jika Customer -> Masuk Halaman Belanja
+                return redirect()->route('shop.index');
+            }
+            // ------------------------------------
+            
+        } else {
+            // Jika Password Salah
+            Session::flash('error', 'Email atau Password Salah');
+            return redirect('/');
         }
-    } else {
-        // Jika autentikasi gagal, kembalikan pengguna ke halaman login dengan pesan error
-        return redirect()->back()->with('error', 'Gagal login, coba lagi!');
-    }
     }
 
     public function actionlogout()
     {
-    // Lakukan proses logout pengguna
-    Auth::logout();
-
-    // Redirect pengguna ke halaman login setelah logout
-    return redirect()->route('login');
+        Auth::logout();
+        return redirect('/');
     }
 }

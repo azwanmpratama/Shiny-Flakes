@@ -9,12 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
+    
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+    
+    Schema::create('products', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->bigInteger('price');
+        $table->integer('stock');
+        $table->string('image'); // Menyimpan path gambar
+        $table->string('image_back')->nullable();
+        $table->text('description')->nullable();
+        $table->string('tag')->nullable(); // Contoh: NEW, SALE
+        $table->timestamps();
+    });
+    
     }
 
     /**

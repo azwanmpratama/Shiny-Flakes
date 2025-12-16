@@ -3,19 +3,20 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Drug List - ShinyFlakes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/dist/css/style.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets/dist/css/style.min.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}" />
+    
     <style>
-        .table-custom { border-collapse: separate; border-spacing: 0 10px; }
-        .table-custom tbody tr { background-color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: 0.2s; }
-        .table-custom tbody tr:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(63, 81, 181, 0.1); }
-        .table-custom td { border: none; padding: 15px; vertical-align: middle; }
-        .table-custom td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
-        .table-custom td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+        /* Override Warna Khusus Halaman Ini */
+        .btn-danger-custom { background-color: #d32f2f; color: white; border: none; }
+        .btn-danger-custom:hover { background-color: #b71c1c; color: white; }
+        .text-danger-custom { color: #d32f2f !important; }
+        .sidebar-link.active { background-color: #d32f2f !important; } /* Paksa sidebar merah */
     </style>
 </head>
 
@@ -33,43 +34,25 @@
         <header class="topbar" data-navbarbg="skin6">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header" data-logobg="skin6">
-                    <a class="navbar-brand" href="dashboard">
+                    <a class="navbar-brand" href="{{ route('dashboard') }}">
                         <b class="logo-icon">
-                            <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo" style="width: 40px; height: auto;" />
-                            <img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                            <img src="{{ asset('assets/images/logo-icon.png') }}" class="dark-logo" style="width: 40px;" />
                         </b>
                         <span class="logo-text" style="margin-top: 10px;">
-                            <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" style="width: 135px; height: auto;" />
-                            <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                            <img src="{{ asset('assets/images/logo-text.png') }}" class="dark-logo" style="width: 135px;" />
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                 </div>
                 <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <ul class="navbar-nav float-start me-auto">
-                        <li class="nav-item search-box">
-                            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-magnify me-1"></i> <span class="font-16">Search</span></a>
-                            <form class="app-search position-absolute">
-                                <input type="text" class="form-control" placeholder="Search &amp; enter" style="color: #3f51b5" />
-                                <a class="srh-btn"><i class="mdi mdi-window-close"></i></a>
-                            </form>
-                        </li>
-                    </ul>
+                    <ul class="navbar-nav float-start me-auto"></ul>
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/users/profile.png" alt="user" class="rounded-circle" width="31" />
+                                <img src="{{ asset('assets/images/users/profile.png') }}" class="rounded-circle" width="31" />
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="javascript:void(0)" style="cursor: default;">
-                                    <i style="color: #3f51b5" class="mdi mdi-account-key m-r-5 m-l-5"></i> 
-                                    {{ Auth::user()->role ?? 'Admin' }}
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" onclick="confirmLogout(event)">
-                                    <i style="color: #3f51b5" class="mdi mdi-logout-variant m-r-5 m-l-5"></i> Logout
-                                </a>
-                                <form id="logout-form" action="{{ route('actionlogout') }}" method="GET" style="display: none;">@csrf</form>
+                                <a class="dropdown-item" href="{{ route('actionlogout') }}"><i class="mdi mdi-logout m-r-5 m-l-5"></i> Logout</a>
                             </ul>
                         </li>
                     </ul>
@@ -77,67 +60,7 @@
             </nav>
         </header>
 
-        <aside class="left-sidebar" data-sidebarbg="skin6">
-            <div class="scroll-sidebar" style="margin-top: 15px;">
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-                        <li class="sidebar-item {{ Request::is('dashboard') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('dashboard') ? 'active' : '' }}" 
-                            href="dashboard" 
-                            aria-expanded="false"
-                            style="{{ Request::is('dashboard') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-                                <i class="mdi mdi-view-dashboard" style="color: {{ Request::is('dashboard') ? '#ffffff' : '#3f51b5' }};"></i>
-                                <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('dashboard') ? '#ffffff' : '#3f51b5' }};">Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item {{ Request::is('produk*') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('produk*') ? 'active' : '' }}" 
-                            href="produk" 
-                            aria-expanded="false"
-                            style="{{ Request::is('produk*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-                                <i class="mdi mdi-store" style="color: {{ Request::is('produk*') ? '#ffffff' : '#3f51b5' }};"></i>
-                                <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('produk*') ? '#ffffff' : '#3f51b5' }};">Product</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item {{ Request::is('pembelian*') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('pembelian*') ? 'active' : '' }}" 
-                            href="pembelian" 
-                            aria-expanded="false"
-                            style="{{ Request::is('pembelian*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-                                <i class="mdi mdi-border-all" style="color: {{ Request::is('pembelian*') ? '#ffffff' : '#3f51b5' }};"></i>
-                                <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('pembelian*') ? '#ffffff' : '#3f51b5' }};">Transactions</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item {{ Request::is('user*') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('user*') ? 'active' : '' }}" 
-                            href="user" 
-                            aria-expanded="false"
-                            style="{{ Request::is('user*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-                                <i class="mdi mdi-skull" style="color: {{ Request::is('user*') ? '#ffffff' : '#3f51b5' }};"></i>
-                                <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('user*') ? '#ffffff' : '#3f51b5' }};">Users</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item {{ Request::is('drug*') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('drug*') ? 'active' : '' }}" 
-                            href="drug" 
-                            aria-expanded="false"
-                            style="{{ Request::is('drug*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-                                <i class="mdi mdi-pill" style="color: {{ Request::is('drug*') ? '#ffffff' : '#3f51b5' }};"></i>
-                                <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('drug*') ? '#ffffff' : '#3f51b5' }};">Drug List</span>
-                            </a>
-                        </li>
-
-                        <li class="text-center p-40 upgrade-btn">
-                            <a href="https://m.media-amazon.com/images/I/51WlnqNiCBL._AC_.jpg" class="btn d-block w-100 btn-danger text-white" target="_blank">21 +</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
+        @include('layouts.sidebar')
 
         <div class="page-wrapper">
             <div class="page-breadcrumb">
@@ -145,69 +68,92 @@
                     <div class="col-6">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0 d-flex align-items-center">
-                                <li class="breadcrumb-item"><a href="dashboard" class="link"><i class="mdi mdi-home-outline fs-4"></i></a></li>
+                                <li class="breadcrumb-item"><a href="dashboard" class="link"><i class="mdi mdi-home-outline fs-4 text-danger-custom"></i></a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Drug List</li>
                             </ol>
                         </nav>
-                        <h1 class="mb-0 fw-bold">Master Data (Drug List)</h1>
+                        <h1 class="mb-0 fw-bold text-danger-custom">Restricted Items</h1>
                     </div>
                 </div>
             </div>
 
-            <div class="container-fluid" style="padding: 30px;">
-                
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h4 class="card-title mb-1">Drug List Database</h4>
-                        <span class="text-muted">Manage available substances for product input</span>
-                    </div>
-                    <button class="btn btn-primary rounded-pill px-4 py-2 shadow-sm" 
-                        style="background-color: #3f51b5;" data-bs-toggle="modal" data-bs-target="#addDrugModal">
-                        <i class="mdi mdi-plus-circle-outline me-2"></i> Add New Item
-                    </button>
-                </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card border-top border-danger border-2">
+                            <div class="card-body">
+                                
+                                @if(session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
 
-                <div class="card border-0 bg-transparent">
-                    <div class="table-responsive">
-                        <table class="table table-custom">
-                            <thead>
-                                <tr class="text-muted small text-uppercase">
-                                    <th class="ps-3">No</th>
-                                    <th>Substance Name</th>
-                                    <th>Category</th>
-                                    <th>Registered Date</th>
-                                    <th class="text-end pe-3">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($drugs as $item)
-                                <tr>
-                                    <td class="ps-3">{{ $loop->iteration }}</td>
-                                    <td><span class="fw-bold text-dark">{{ $item->name }}</span></td>
-                                    <td><span class="badge bg-light text-primary border">{{ $item->category }}</span></td>
-                                    <td class="text-muted small">{{ $item->created_at->format('d M Y') }}</td>
-                                    <td class="text-end pe-3">
-                                        <form id="delete-form-{{ $item->id }}" action="{{ route('drug.delete', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="confirmDelete('{{ $item->id }}')">
-                                                <i class="mdi mdi-trash-can-outline fs-5"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-5 text-muted">No data found in archives.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="card-title text-danger-custom"><i class="mdi mdi-flask me-2"></i>Substance Database</h4>
+                                    <button type="button" class="btn btn-danger-custom text-white shadow-sm" data-bs-toggle="modal" data-bs-target="#addDrugModal" style="border-radius: 50px;">
+                                        <i class="mdi mdi-plus me-1"></i> Add Substance
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle text-nowrap">
+                                        <thead class="bg-danger text-white">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Image</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Category</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Stock</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($drugs as $drug)
+                                            <tr>
+                                                <th scope="row">{{ $loop->iteration }}</th>
+                                                <td>
+                                                    <img src="{{ asset('assets/images/drug/' . $drug->image) }}" alt="drug" width="50" class="rounded border">
+                                                </td>
+                                                <td class="fw-bold">{{ $drug->name }}</td>
+                                                <td>
+                                                    <span class="badge bg-dark rounded-pill">{{ $drug->category ?? 'Stimulant' }}</span>
+                                                </td>
+                                                <td class="text-danger fw-bold">Rp {{ number_format($drug->price, 0, ',', '.') }}</td>
+                                                <td>
+                                                    <span class="badge bg-danger rounded-pill">{{ $drug->stock }} g</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    @if(Auth::user()->role == 'admin')
+                                                        <form action="{{ route('drug.delete', $drug->id) }}" method="POST" onsubmit="return confirm('Destroy this substance record?');" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Destroy</button>
+                                                        </form>
+                                                    @else
+                                                        <span class="text-muted small">Restricted</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted py-5">
+                                                    <i class="mdi mdi-flask-empty fs-1 text-danger-custom"></i>
+                                                    <p class="text-danger-custom">No substances in inventory.</p>
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
-            
+
             <footer class="footer text-center">
                 All Rights Reserved by Shiny Flakes.
             </footer>
@@ -216,91 +162,72 @@
 
     <div class="modal fade" id="addDrugModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 p-3">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Add Substance</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header border-bottom-0 bg-danger text-white" style="border-radius: 15px 15px 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="mdi mdi-alert-circle-outline me-2"></i>New Substance Entry</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="{{ route('drug.store') }}" method="POST">
-                        @csrf
+                <form action="{{ route('drug.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="e.g. Methamphetamine" required>
+                            <label class="form-label fw-bold text-danger-custom">Substance Name</label>
+                            <input type="text" class="form-control border-danger" name="name" required placeholder="Ex: Blue Crystal" style="border-radius: 10px;">
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label text-muted small fw-bold">Category</label>
-                            <select name="category" class="form-select">
-                                <option value="Pills">Pills / XTC</option>
-                                <option value="Powder">Powder</option>
-                                <option value="Organic">Organic</option>
-                                <option value="Crystal">Crystal</option>
-                                <option value="Liquid">Liquid</option>
-                                <option value="Pharma">Pharma</option>
-                                <option value="Weapon">Weapon</option>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-danger-custom">Category</label>
+                            <select class="form-select border-danger" name="category" style="border-radius: 10px;">
+                                <option value="Stimulants">Stimulants</option>
+                                <option value="Psychedelics">Psychedelics</option>
+                                <option value="Opioids">Opioids</option>
+                                <option value="Cannabinoids">Cannabinoids</option>
+                                <option value="Dissociatives">Dissociatives</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2" style="background-color: #3f51b5;">Save to Database</button>
-                    </form>
-                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-danger-custom">Price (Rp)</label>
+                                <input type="text" class="form-control border-danger" name="price" id="inputHargaDrug" required placeholder="0" style="border-radius: 10px;" onkeyup="formatRupiah(this)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-danger-custom">Stock (Gram/Pcs)</label>
+                                <input type="number" class="form-control border-danger" name="stock" required placeholder="100" style="border-radius: 10px;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-danger-custom">Image Evidence</label>
+                            <input type="file" class="form-control border-danger" name="image" required accept="image/*" style="border-radius: 10px;">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger-custom rounded-pill px-4">Save to Database</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/dist/js/app-style-switcher.js"></script>
-    <script src="../assets/dist/js/waves.js"></script>
-    <script src="../assets/dist/js/sidebarmenu.js"></script>
-    <script src="../assets/dist/js/custom.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/dist/js/app-style-switcher.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/waves.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/sidebarmenu.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/custom.js') }}"></script>
 
     <script>
-        // Logic Logout Confirm
-        function confirmLogout(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Leaving so soon?',
-                text: "Session will be terminated.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3F51B5',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Logout!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('logout-form').submit();
-                }
-            })
-        }
-
-        // SweetAlert Success
-        @if (Session::get('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ Session::get("success") }}',
-                confirmButtonColor: '#3f51b5',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        @endif
-
-        // SweetAlert Delete Confirmation
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Destroy this Item?',
-                text: "You won't be able to recover this substance data!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3f51b5',
-                confirmButtonText: 'Yes, destroy it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            })
+        function formatRupiah(element) {
+            let value = element.value.replace(/[^,\d]/g, '').toString();
+            let split = value.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            element.value = rupiah;
         }
     </script>
 </body>

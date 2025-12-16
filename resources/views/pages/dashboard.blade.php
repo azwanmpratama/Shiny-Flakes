@@ -69,73 +69,7 @@
             </nav>
         </header>
 
-        <aside class="left-sidebar" data-sidebarbg="skin6">
-            <div class="scroll-sidebar" style="margin-top: 15px;">
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-    
-    <li class="sidebar-item {{ Request::is('dashboard') ? 'selected' : '' }}">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('dashboard') ? 'active' : '' }}" 
-           href="dashboard" 
-           aria-expanded="false"
-           style="{{ Request::is('dashboard') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-            
-            <i class="mdi mdi-view-dashboard" style="color: {{ Request::is('dashboard') ? '#ffffff' : '#3f51b5' }};"></i>
-            <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('dashboard') ? '#ffffff' : '#3f51b5' }};">Dashboard</span>
-        </a>
-    </li>
-
-    <li class="sidebar-item {{ Request::is('produk*') ? 'selected' : '' }}">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('produk*') ? 'active' : '' }}" 
-           href="produk" 
-           aria-expanded="false"
-           style="{{ Request::is('produk*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-            
-            <i class="mdi mdi-store" style="color: {{ Request::is('produk*') ? '#ffffff' : '#3f51b5' }};"></i>
-            <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('produk*') ? '#ffffff' : '#3f51b5' }};">Product</span>
-        </a>
-    </li>
-
-    <li class="sidebar-item {{ Request::is('pembelian*') ? 'selected' : '' }}">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('pembelian*') ? 'active' : '' }}" 
-           href="pembelian" 
-           aria-expanded="false"
-           style="{{ Request::is('pembelian*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-            
-            <i class="mdi mdi-border-all" style="color: {{ Request::is('pembelian*') ? '#ffffff' : '#3f51b5' }};"></i>
-            <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('pembelian*') ? '#ffffff' : '#3f51b5' }};">Transactions</span>
-        </a>
-    </li>
-
-    <li class="sidebar-item {{ Request::is('user*') ? 'selected' : '' }}">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('user*') ? 'active' : '' }}" 
-           href="user" 
-           aria-expanded="false"
-           style="{{ Request::is('user*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-            
-            <i class="mdi mdi-skull" style="color: {{ Request::is('user*') ? '#ffffff' : '#3f51b5' }};"></i>
-            <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('user*') ? '#ffffff' : '#3f51b5' }};">Users</span>
-        </a>
-    </li>
-
-    <li class="sidebar-item {{ Request::is('drug*') ? 'selected' : '' }}">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('drug*') ? 'active' : '' }}" 
-           href="drug" 
-           aria-expanded="false"
-           style="{{ Request::is('drug*') ? 'background-color: #3f51b5; border-radius: 10px; color: white !important;' : '' }}">
-            
-            <i class="mdi mdi-pill" style="color: {{ Request::is('drug*') ? '#ffffff' : '#3f51b5' }};"></i>
-            <span class="hide-menu" style="font-weight: 600; color: {{ Request::is('drug*') ? '#ffffff' : '#3f51b5' }};">Drugs</span>
-        </a>
-    </li>
-
-    <li class="text-center p-40 upgrade-btn">
-        <a href="https://m.media-amazon.com/images/I/51WlnqNiCBL._AC_.jpg" class="btn d-block w-100 btn-danger text-white" target="_blank">21 +</a>
-    </li>
-</ul>
-                </nav>
-            </div>
-        </aside>
+        @include('layouts.sidebar')
 
         <div class="page-wrapper">
             <div class="page-breadcrumb">

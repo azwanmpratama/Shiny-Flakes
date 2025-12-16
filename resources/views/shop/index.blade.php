@@ -3,192 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINY FLAKES | Official Store</title>
+    <title>Shop | Shiny Flakes</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #3F51B5; /* Indigo */
-            --bg-light: #ffffff;
-            --bg-card-light: #F2F2F7;
-            --text-light: #1d1d1f;
-            
-            --bg-dark: #050505;
-            --bg-card-dark: #121212;
-            --text-dark: #f5f5f7;
+            --primary: #3F51B5;
+            --bg-light: #ffffff; --bg-card-light: #F2F2F7; --text-light: #1d1d1f;
+            --bg-dark: #050505; --bg-card-dark: #121212; --text-dark: #f5f5f7;
         }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-light);
-            transition: background-color 0.8s ease, color 0.8s ease;
-            overflow-x: hidden;
-            cursor: default; /* Kursor default, trail via JS */
-        }
-
-        /* --- 1. NAVBAR DENGAN EFEK BLUR SAAT SCROLL --- */
-        .navbar {
-            padding: 20px 0;
-            background: transparent; /* Awal transparan */
-            border-bottom: 1px solid transparent;
-            transition: all 0.4s ease;
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-light); color: var(--text-light); transition: background-color 0.8s ease, color 0.8s ease; overflow-x: hidden; cursor: default; }
         
-        /* Class ini akan ditambahkan via JS saat scroll */
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.85); /* Putih transparan */
-            backdrop-filter: blur(12px); /* EFEK BLUR */
-            padding: 15px 0; /* Sedikit mengecil */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        [data-bs-theme="dark"] .navbar.scrolled {
-            background: rgba(0, 0, 0, 0.85);
-            border-bottom: 1px solid #333;
-        }
-
-        /* Styling Logo Image */
+        /* NAVBAR */
+        .navbar { padding: 20px 0; background: transparent; border-bottom: 1px solid transparent; transition: all 0.4s ease; position: fixed; width: 100%; top: 0; z-index: 1030; }
+        .navbar.scrolled { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); padding: 15px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        [data-bs-theme="dark"] .navbar.scrolled { background: rgba(0, 0, 0, 0.85); border-bottom: 1px solid #333; }
+        
+        /* LOGO */
         .navbar-brand img { transition: 0.3s; }
-        .logo-icon { height: 45px; width: auto; margin-right: 8px; }
-        .logo-text { height: 35px; width: auto; }
-        
-        /* Dark Mode Logo Invert (Agar teks hitam jadi putih) */
+        .logo-icon { height: 50px; width: auto; margin-right: 10px; }
+        .logo-text { height: 35px; width: auto; margin-top: 10px; }
         [data-bs-theme="dark"] .logo-text { filter: invert(1) brightness(2); }
+        #secretTrigger { cursor: pointer; user-select: none; }
 
-        .nav-link { font-weight: 600; font-size: 0.9rem; margin: 0 12px; color: var(--text-light) !important; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        /* MENU & ANIMATION */
+        @media (min-width: 992px) { .centered-nav { position: absolute; left: 50%; transform: translateX(-50%); } }
+        .nav-link { font-weight: 600; font-size: 0.9rem; margin: 0 15px; color: var(--text-light) !important; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; position: relative; display: inline-block; }
         .nav-link:hover { color: var(--primary) !important; }
-        
-        .icon-btn { font-size: 1.4rem; color: var(--text-light); margin-left: 20px; transition: 0.3s; cursor: pointer; text-decoration: none; }
-        .icon-btn:hover { color: var(--primary); transform: translateY(-2px); }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%; background-color: var(--primary); transition: width 0.3s ease-in-out, left 0.3s ease-in-out; transform: translateX(-50%); }
+        .nav-link:hover::after { width: 100%; }
+        [data-bs-theme="dark"] .nav-link { color: #888 !important; }
+        [data-bs-theme="dark"] .nav-link:hover { color: var(--primary) !important; text-shadow: 0 0 10px rgba(63, 81, 181, 0.6); }
+        #navMenu { transition: opacity 0.4s ease, transform 0.4s ease; opacity: 1; transform: translateY(0); }
+        #navMenu.changing { opacity: 0; transform: translateY(-10px); }
 
-        /* --- 2. KURSOR BINTANG SEGI 4 --- */
-        .cursor-star {
-            position: fixed; width: 18px; height: 18px;
-            background: var(--primary);
-            /* Bintang Segi 4 (Diamond Star) */
-            clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
-            pointer-events: none; z-index: 10000; margin-top: -9px; margin-left: -9px;
-            opacity: 0.7; animation: fadeTrail 0.5s linear forwards;
-        }
-        @keyframes fadeTrail { to { opacity: 0; transform: scale(0.2) rotate(90deg); } }
-
-        /* --- HERO SECTION --- */
-        .hero-wrap {
-            position: relative; height: 500px; width: 100%;
-            border-radius: 30px; overflow: hidden; margin-top: 40px; margin-bottom: 60px;
-            transition: all 0.8s ease; 
-        }
+        /* HERO */
+        .hero-wrap { position: relative; height: 500px; width: 100%; border-radius: 30px; overflow: hidden; margin-top: 40px; margin-bottom: 60px; transition: all 0.8s ease; }
         .hero-bg { width: 100%; height: 100%; background-size: cover; background-position: center; transition: transform 10s ease; }
         .hero-wrap:hover .hero-bg { transform: scale(1.05); }
-        .hero-content {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 60px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: white; text-align: left;
-        }
+        .hero-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 60px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; text-align: left; }
         .hero-title { font-weight: 900; font-size: 4rem; line-height: 1; margin-bottom: 10px; transition: 0.5s; }
         .hero-tag { background: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 15px; transition: 0.5s; }
 
-        /* --- 3D FLIP CARD ANIMATION --- */
-        .product-col { perspective: 1000px; }
-        .product-card {
-            background-color: var(--bg-card-light);
-            border-radius: 24px; padding: 40px 20px; text-align: center;
-            position: relative; overflow: hidden; height: 100%;
-            border: 1px solid transparent;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.6s, border-color 0.6s;
-            transform-style: preserve-3d; backface-visibility: hidden;
-        }
-        /* State Flip */
-        .product-col.flipping-out .product-card { transform: rotateY(90deg) scale(0.9); opacity: 0.5; }
-        .product-col.prepare-flip-in .product-card { transform: rotateY(-90deg) scale(0.9); transition: none; }
+        /* PRODUCT CARDS */
+        .product-col { perspective: 1000px; transition: 0.5s; }
+        .product-col .product-card { transform: rotateY(0deg); opacity: 1; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s; }
+        .product-col.flipping-out .product-card { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+        .product-col.prepare-flip-in .product-card { transform: rotateY(-90deg) scale(0.8); opacity: 0; transition: none; }
+        .product-card { background-color: var(--bg-card-light); border-radius: 15px; padding: 0 0 20px 0; text-align: center; position: relative; overflow: hidden; height: 100%; border: 1px solid transparent; cursor: pointer; transform-style: preserve-3d; }
+        .img-container { position: relative; width: 100%; padding-bottom: 125%; overflow: hidden; border-radius: 15px 15px 0 0; background: #f0f0f0; }
+        .prod-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease-in-out, transform 0.6s ease; }
+        .img-hover { opacity: 0; z-index: 2; }
+        .product-card:hover .img-hover { opacity: 1; } .product-card:hover .img-main { opacity: 0; } .product-card:hover .prod-img { transform: scale(1.05); }
+        .action-overlay { position: absolute; bottom: 15px; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; z-index: 3; }
+        .product-card:hover .action-overlay { opacity: 1; transform: translateY(0); }
+        .action-btn { width: 40px; height: 40px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #111; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: 0.2s; }
+        .action-btn:hover { background: var(--primary); color: white; }
+        .prod-info { padding: 15px 15px 0 15px; text-align: left; }
+        .prod-title { font-weight: 700; font-size: 1rem; margin-bottom: 5px; color: inherit; text-transform: uppercase; letter-spacing: 0.5px; }
+        .prod-price { font-weight: 500; color: #666; font-size: 0.95rem; }
+        .discount-badge { position: absolute; top: 10px; left: 10px; z-index: 5; background: #111; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 
-        .img-area { height: 280px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; transition: 0.3s ease; }
-        .prod-img { max-width: 90%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08)); transition: 0.3s ease; }
-        
-        .action-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(4px);
-            opacity: 0; visibility: hidden; transition: all 0.3s ease;
-        }
-        .action-btn {
-            width: 50px; height: 50px; border-radius: 50%; background: white;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; color: #111; border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: translateY(20px); transition: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            cursor: pointer; text-decoration: none;
-        }
-        .action-btn:hover { background: var(--primary); color: white; transform: translateY(0) scale(1.1); }
-        .product-card:hover .action-overlay { opacity: 1; visibility: visible; }
-        .product-card:hover .action-btn { transform: translateY(0); }
-        .product-card:hover .action-btn:nth-child(2) { transition-delay: 0.05s; }
-        .product-card:hover .action-btn:nth-child(3) { transition-delay: 0.1s; }
-
-        .prod-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; color: inherit; }
-        .prod-price { font-weight: 500; color: #999; font-size: 1rem; }
-        
-        /* Dark Mode Elements */
+        /* DARK MODE */
         [data-bs-theme="dark"] body { background-color: var(--bg-dark); color: var(--text-dark); }
         [data-bs-theme="dark"] .product-card { background-color: var(--bg-card-dark); border: 1px solid #222; }
+        [data-bs-theme="dark"] .img-container { background: #1a1a1a; }
         [data-bs-theme="dark"] .action-btn { background: #222; color: white; border: 1px solid #333; }
         [data-bs-theme="dark"] .action-btn:hover { background: var(--primary); border-color: var(--primary); }
-        [data-bs-theme="dark"] .nav-link { color: #888 !important; }
-        [data-bs-theme="dark"] .nav-link:hover { color: #fff !important; }
         [data-bs-theme="dark"] .icon-btn { color: #fff; }
-        [data-bs-theme="dark"] .action-overlay { background: rgba(0,0,0,0.6); }
         [data-bs-theme="dark"] .offcanvas { background-color: #111; color: #fff; border-left: 1px solid #333; }
         [data-bs-theme="dark"] .btn-close { filter: invert(1); }
+        [data-bs-theme="dark"] .discount-badge { background: var(--primary); }
+        .icon-btn { font-size: 1.4rem; color: var(--text-light); margin-left: 20px; transition: 0.3s; cursor: pointer; text-decoration: none; }
+        .icon-btn:hover { color: var(--primary); transform: translateY(-2px); }
 
-        #secretTrigger { cursor: pointer; user-select: none; }
+        #flashOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 9999; pointer-events: none; opacity: 0; transition: opacity 0.5s ease; }
+
+        /* --- CUSTOM DROPDOWN SHINY STYLE --- */
+        .dropdown-menu { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(63, 81, 181, 0.1); border-radius: 16px; padding: 10px; min-width: 220px; box-shadow: 0 10px 40px rgba(63, 81, 181, 0.15); margin-top: 15px !important; animation: slideDown 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .dropdown-header { color: #3f51b5; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; padding: 8px 16px; margin-bottom: 5px; }
+        .dropdown-divider { border-top: 1px solid rgba(63, 81, 181, 0.1); margin: 5px 0; }
+        .dropdown-item { border-radius: 10px; padding: 10px 16px; font-weight: 600; color: #555; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; }
+        .dropdown-item:hover { background: rgba(63, 81, 181, 0.08); color: #3f51b5; transform: translateX(5px); }
+        .dropdown-item i { font-size: 1.2rem; color: #3f51b5; transition: 0.2s; }
+        .dropdown-item.text-danger { color: #ff4757; }
+        .dropdown-item.text-danger:hover { background: rgba(255, 71, 87, 0.1); color: #ff4757; }
+        .dropdown-item.text-danger i { color: #ff4757; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .dropdown-menu::before { content: ''; position: absolute; top: -6px; right: 20px; width: 12px; height: 12px; background: white; transform: rotate(45deg); border-left: 1px solid rgba(63, 81, 181, 0.1); border-top: 1px solid rgba(63, 81, 181, 0.1); }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
+    <div id="flashOverlay"></div>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container position-relative">
             <a class="navbar-brand d-flex align-items-center" id="secretTrigger">
                 <img src="{{ asset('assets/images/shinyflakes-icon 1.png') }}" class="logo-icon" alt="Icon">
-                <img src="{{ asset('assets/images/logo-text.png') }}" class="logo-text" alt="Logo">
+                <img src="{{ asset('assets/images/logo-text.png') }}" class="logo-text" id="logoImage" alt="Logo">
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <span class="mdi mdi-menu"></span>
             </button>
 
-            <div class="collapse navbar-collapse justify-content-center" id="navContent">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#">New Arrivals</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Brands</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Apparel</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sale</a></li>
-                </ul>
+            <div class="collapse navbar-collapse centered-nav" id="navContent">
+                <ul class="navbar-nav mx-auto" id="navMenu"></ul>
             </div>
 
-            <div class="d-flex align-items-center">
-                <div class="icon-btn position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+            <div class="d-flex align-items-center ms-auto">
+                <div class="icon-btn position-relative me-3" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
                     <i class="mdi mdi-shopping-outline"></i>
                     <span class="position-absolute top-0 start-100 translate-middle p-1 bg-primary rounded-circle border border-white" style="width:10px; height:10px;"></span>
                 </div>
-                <a href="{{ route('login') }}" class="icon-btn"><i class="mdi mdi-account-outline"></i></a>
+
+                @guest
+                    <a href="{{ route('login') }}" class="icon-btn" title="Login">
+                        <i class="mdi mdi-account-outline"></i>
+                    </a>
+                @else
+                    <div class="dropdown">
+                        <a href="#" class="icon-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="mdi mdi-account-check" style="color: var(--primary);"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Hi, {{ Auth::user()->name }}</h6></li>
+                            
+                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'kasir')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <i class="mdi mdi-view-dashboard-outline"></i> 
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ route('actionlogout') }}">
+                                    <i class="mdi mdi-logout-variant"></i> 
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endguest
             </div>
         </div>
     </nav>
 
     <div class="container" style="margin-top: 100px;">
         <div class="hero-wrap">
-            <div class="hero-bg" id="heroBg" style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="hero-bg" id="heroBg" style="background-image: url('https://divinbydivin.com/cdn/shop/files/KEY_VISUAL.png?v=1764059568&width=1800');"></div>
             <div class="hero-content">
                 <span class="hero-tag" id="heroTag">New Collection</span>
-                <h1 class="hero-title" id="heroTitle">STREET<br>CULTURE</h1>
+                <h1 class="hero-title" id="heroTitle">DIVIN<br>BY DIVIN</h1>
             </div>
         </div>
 
-        <div class="row g-4 mb-5" id="productContainer">
-            </div>
+        <div class="row g-4 mb-5" id="productContainer"></div>
     </div>
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" style="border-radius: 20px 0 0 20px;">
@@ -204,137 +183,198 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- SCROLL BLUR NAVBAR LOGIC ---
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+    // Listener Scroll Navbar
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    });
 
-        // --- CUSTOM CURSOR (BINTANG 4 SUDUT) ---
-        document.addEventListener('mousemove', (e) => {
-            if(Math.random() > 0.3) return; // Optimasi performa
-            const star = document.createElement('div');
-            star.classList.add('cursor-star');
-            star.style.left = e.clientX + 'px';
-            star.style.top = e.clientY + 'px';
-            document.body.appendChild(star);
-            setTimeout(() => star.remove(), 500);
-        });
+    // --- DATASET DINAMIS DARI DATABASE ---
+    const fakeProducts = @json($fashionProducts ?? []);
+    const realProducts = @json($realProducts ?? []);
 
-        // --- DATABASE ---
-        // 1. KAMUFLASE (Streetwear: Corteiz & Divin)
-        const fakeProducts = [
-            { id: 1, name: "Divin Archive Puffer", price: "Rp 2.500.000", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=500&q=80", tag: "NEW" },
-            { id: 2, name: "Corteiz Hoodie Black", price: "Rp 1.800.000", img: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=500&q=80", tag: "" },
-            { id: 3, name: "Utility Cargo Pants", price: "Rp 1.200.000", img: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=500&q=80", tag: "HOT" },
-            { id: 4, name: "Guerilla Balaclava", price: "Rp 650.000", img: "https://images.unsplash.com/photo-1611576628234-9273c0993096?auto=format&fit=crop&w=500&q=80", tag: "" },
-        ];
+    // --- MENU CONFIG ---
+    const menuFashion = `
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('New')">New Arrivals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Jacket')">Jackets</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Denim')">Denim</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('T-Shirt')">T-Shirt</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Tracksuit')">Tracksuit</a></li>
+    `;
 
-        // 2. REAL (Shiny Flakes - Drugs)
-        const realProducts = [
-            { id: 101, name: "Shiny Flakes XTC", price: "Rp 450.000", img: "{{ asset('assets/images/drug/d1.png') }}", tag: "PURE" },
-            { id: 102, name: "Magic Mushroom", price: "Rp 250.000", img: "{{ asset('assets/images/drug/d2.png') }}", tag: "BIO" },
-            { id: 103, name: "Blue Punisher", price: "Rp 500.000", img: "{{ asset('assets/images/drug/d3.png') }}", tag: "STRONG" },
-            { id: 104, name: "Peruvian Flake", price: "Rp 1.800.000", img: "{{ asset('assets/images/drug/d4.png') }}", tag: "98%" },
-        ];
+    const menuReal = `
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Cocaine')">Stimulants</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Crystal')">Crystals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Emoji')">Pills / XTC</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('Xanax')">Pharma</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="scrollToProduct('LSD')">Psychedelics</a></li>
+    `;
 
-        let clickCount = 0;
-        let clickTimer;
-        let isRealMode = false;
-        const htmlElement = document.documentElement;
+    let clickCount = 0;
+    let clickTimer;
+    let isRealMode = false;
+    const htmlElement = document.documentElement;
 
-        // RENDER PRODUCTS
-        function renderProducts(products, animate = false) {
-            const container = document.getElementById('productContainer');
+    // FUNGSI RENDER KARTU
+    function renderProducts(products) {
+        const container = document.getElementById('productContainer');
+        
+        // Animasi Keluar
+        const cards = container.querySelectorAll('.product-col');
+        cards.forEach((col, index) => { setTimeout(() => { col.classList.add('flipping-out'); }, index * 30); });
+        
+        setTimeout(() => {
+            container.innerHTML = '';
+            products.forEach((p) => {
+                const col = createCard(p);
+                col.classList.add('prepare-flip-in');
+                container.appendChild(col);
+            });
             
-            if(container.children.length === 0) {
-                products.forEach((p) => container.appendChild(createCard(p)));
-            } else {
-                const cards = container.querySelectorAll('.product-col');
-                cards.forEach((col, index) => {
-                    setTimeout(() => { col.classList.add('flipping-out'); }, index * 100);
-                    setTimeout(() => {
-                        col.innerHTML = getCardHTML(products[index]);
-                        col.classList.add('prepare-flip-in');
-                        col.classList.remove('flipping-out');
-                        void col.offsetWidth;
-                        col.classList.remove('prepare-flip-in');
-                    }, (index * 100) + 400);
-                });
-            }
-        }
+            // Animasi Masuk
+            const newCards = container.querySelectorAll('.product-col');
+            newCards.forEach((col, index) => {
+                void col.offsetWidth;
+                setTimeout(() => { col.classList.remove('prepare-flip-in'); }, index * 30);
+            });
+        }, 600);
+    }
 
-        function createCard(p) {
-            const col = document.createElement('div');
-            col.className = 'col-6 col-md-3 product-col';
-            col.innerHTML = getCardHTML(p);
-            return col;
-        }
+    function createCard(p) {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-3 product-col'; 
+        col.innerHTML = getCardHTML(p);
+        return col;
+    }
 
-        function getCardHTML(p) {
-            const badge = p.tag ? `<div class="badge bg-dark text-white position-absolute top-0 start-0 m-3 rounded-pill px-3">${p.tag}</div>` : '';
-            // Sesuaikan badge untuk dark mode nanti via CSS
-            
-            return `
-                <div class="product-card">
-                    ${p.tag ? '<span class="badge bg-secondary position-absolute top-0 start-0 m-4 rounded-pill">'+p.tag+'</span>' : ''}
-                    <div class="img-area"><img src="${p.img}" class="prod-img" alt="${p.name}"></div>
-                    <div class="action-overlay">
-                        <button class="action-btn"><i class="mdi mdi-heart-outline"></i></button>
-                        <a href="{{ route('shop.detail') }}" class="action-btn"><i class="mdi mdi-cart-outline"></i></a>
-                        <a href="{{ route('shop.detail') }}" class="action-btn"><i class="mdi mdi-arrow-right"></i></a>
-                    </div>
-                    <div class="mt-3">
-                        <h5 class="prod-title text-truncate">${p.name}</h5>
-                        <p class="prod-price">${p.price}</p>
-                    </div>
+    function getCardHTML(p) {
+        const url = "{{ url('/shop/detail') }}/" + p.id;
+        // Badge: Kalau mode obat, warnanya merah
+        const badgeColor = isRealMode ? 'background: #d32f2f;' : '';
+        const badge = p.tag ? `<div class="discount-badge" style="${badgeColor}">${p.tag}</div>` : '';
+        
+        return `
+            <div class="product-card" onclick="window.location.href='${url}'">
+                ${badge}
+                <div class="img-container">
+                    <img src="${p.imgFront}" class="prod-img img-main" alt="${p.name}">
+                    <img src="${p.imgBack}" class="prod-img img-hover" alt="${p.name} Back">
                 </div>
-            `;
-        }
+                <div class="action-overlay">
+                    <button class="action-btn"><i class="mdi mdi-heart-outline"></i></button>
+                    <button class="action-btn"><i class="mdi mdi-cart-outline"></i></button>
+                    <button class="action-btn"><i class="mdi mdi-arrow-right"></i></button>
+                </div>
+                <div class="prod-info">
+                    <h5 class="prod-title text-truncate">${p.name}</h5>
+                    <p class="prod-price">${p.price}</p>
+                </div>
+            </div>
+        `;
+    }
 
-        // INITIAL LOAD
-        renderProducts(fakeProducts);
-        localStorage.setItem('shinyMode', 'false');
+    function updateNavbar() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.classList.add('changing'); 
+        setTimeout(() => {
+            navMenu.innerHTML = isRealMode ? menuReal : menuFashion;
+            navMenu.classList.remove('changing');
+        }, 400); 
+    }
 
-        // TRIGGER LOGIC (FLIP CARD)
-        document.getElementById('secretTrigger').addEventListener('click', function() {
-            clickCount++;
-            clearTimeout(clickTimer);
-
-            if (clickCount === 5) {
-                clickCount = 0;
-                isRealMode = !isRealMode;
-                localStorage.setItem('shinyMode', isRealMode);
-
-                if(isRealMode) {
-                    // MODE DRUG
-                    renderProducts(realProducts);
-                    setTimeout(() => {
-                        htmlElement.setAttribute('data-bs-theme', 'dark');
-                        document.getElementById('heroTag').innerText = "Restricted Area";
-                        document.getElementById('heroTag').style.backgroundColor = "#B90000"; 
-                        document.getElementById('heroTitle').innerHTML = "PREMIUM<br>SUBSTANCES";
-                        document.getElementById('heroBg').style.backgroundImage = "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1350&q=80')";
-                    }, 300);
-                } else {
-                    // MODE FASHION
-                    renderProducts(fakeProducts);
-                    setTimeout(() => {
-                        htmlElement.setAttribute('data-bs-theme', 'light');
-                        document.getElementById('heroTag').innerText = "New Collection";
-                        document.getElementById('heroTag').style.backgroundColor = ""; 
-                        document.getElementById('heroTitle').innerHTML = "STREET<br>CULTURE";
-                        document.getElementById('heroBg').style.backgroundImage = "url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1350&q=80')";
-                    }, 300);
-                }
-            } else {
-                clickTimer = setTimeout(() => { clickCount = 0; }, 800);
+    function scrollToProduct(keyword) {
+        event.preventDefault();
+        const titles = document.querySelectorAll('.prod-title');
+        let targetElement = null;
+        for (let title of titles) {
+            if (title.textContent.toUpperCase().includes(keyword.toUpperCase())) {
+                targetElement = title.closest('.product-col');
+                break; 
             }
-        });
-    </script>
+        }
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const card = targetElement.querySelector('.product-card');
+            card.style.transition = "transform 0.3s";
+            card.style.transform = "scale(1.05)";
+            setTimeout(() => { card.style.transform = "scale(1)"; }, 500);
+        }
+    }
+
+    function triggerFlash() {
+        const flash = document.getElementById('flashOverlay');
+        flash.style.opacity = '1';
+        flash.style.background = isRealMode ? '#d32f2f' : 'white'; // Flash Merah pas masuk mode obat
+        setTimeout(() => { flash.style.opacity = '0'; }, 500);
+    }
+
+    // --- INISIALISASI ---
+    // Cek mode terakhir dari LocalStorage
+    const savedMode = localStorage.getItem('shinyMode') === 'true';
+    isRealMode = savedMode;
+
+    if(isRealMode) {
+        // SET MODE: RED/DARK (SAAT LOAD)
+        renderProducts(realProducts);
+        document.getElementById('navMenu').innerHTML = menuReal;
+        htmlElement.setAttribute('data-bs-theme', 'dark');
+        htmlElement.style.setProperty('--primary', '#d32f2f'); // UBAH VAR BIRU JADI MERAH
+        
+        // Setup Hero
+        document.getElementById('heroTag').innerText = "RESTRICTED AREA";
+        document.getElementById('heroTag').style.backgroundColor = "#d32f2f"; 
+        document.getElementById('heroTitle').innerHTML = "PREMIUM<br>SUBSTANCES";
+        document.getElementById('heroBg').style.backgroundImage = "url('https://zinniahealth.com/_next/image?url=https%3A%2F%2Fcdn.zinniahealth.com%2Fwp-content%2Fuploads%2F20230726112257%2Fshutterstock_2107289702.jpg&w=3840&q=75')";
+    } else {
+        // SET MODE: BLUE/LIGHT (SAAT LOAD)
+        renderProducts(fakeProducts);
+        document.getElementById('navMenu').innerHTML = menuFashion;
+        htmlElement.setAttribute('data-bs-theme', 'light');
+        htmlElement.style.setProperty('--primary', '#3F51B5'); // DEFAULT BIRU
+    }
+
+    // --- LOGIKA TRIGGER (KLIK 5X) ---
+    document.getElementById('secretTrigger').addEventListener('click', function() {
+        clickCount++;
+        clearTimeout(clickTimer);
+
+        if (clickCount === 5) {
+            clickCount = 0;
+            isRealMode = !isRealMode;
+            localStorage.setItem('shinyMode', isRealMode);
+            
+            triggerFlash();
+            updateNavbar(); 
+
+            if(isRealMode) {
+                // MASUK MODE OBAT (GANTI MERAH)
+                renderProducts(realProducts);
+                setTimeout(() => {
+                    htmlElement.setAttribute('data-bs-theme', 'dark');
+                    htmlElement.style.setProperty('--primary', '#d32f2f'); // WARNA JADI MERAH
+                    
+                    document.getElementById('heroTag').innerText = "RESTRICTED AREA";
+                    document.getElementById('heroTag').style.backgroundColor = "#d32f2f"; 
+                    document.getElementById('heroTitle').innerHTML = "PREMIUM<br>SUBSTANCES";
+                    document.getElementById('heroBg').style.backgroundImage = "url('https://zinniahealth.com/_next/image?url=https%3A%2F%2Fcdn.zinniahealth.com%2Fwp-content%2Fuploads%2F20230726112257%2Fshutterstock_2107289702.jpg&w=3840&q=75')";
+                }, 300);
+            } else {
+                // BALIK MODE FASHION (GANTI BIRU)
+                renderProducts(fakeProducts);
+                setTimeout(() => {
+                    htmlElement.setAttribute('data-bs-theme', 'light');
+                    htmlElement.style.setProperty('--primary', '#3F51B5'); // BALIK BIRU
+                    
+                    document.getElementById('heroTag').innerText = "New Collection";
+                    document.getElementById('heroTag').style.backgroundColor = ""; 
+                    document.getElementById('heroTitle').innerHTML = "DIVIN<br>BY DIVIN";
+                    document.getElementById('heroBg').style.backgroundImage = "url('https://divinbydivin.com/cdn/shop/files/KEY_VISUAL.png?v=1764059568&width=1800')";
+                }, 300);
+            }
+        } else {
+            clickTimer = setTimeout(() => { clickCount = 0; }, 800);
+        }
+    });
+</script>
 </body>
 </html>
