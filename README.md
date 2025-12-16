@@ -10,9 +10,12 @@ The interface and user experience of **Shiny Flakes** were prototyped using Figm
 
 ## 📸 Screenshots
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400?text=Shiny+Flakes+Dashboard" alt="Dashboard Preview">
-</p>
+<img width="1919" height="963" alt="Screenshot 2025-12-16 082950" src="https://github.com/user-attachments/assets/bec59ba0-e94b-4da6-9900-47178a620e85" />
+<img width="1919" height="967" alt="Screenshot 2025-12-14 232326" src="https://github.com/user-attachments/assets/818c5425-35f8-4b81-b975-6c90e9eaa913" />
+<img width="1919" height="904" alt="Screenshot 2025-12-14 222339" src="https://github.com/user-attachments/assets/919bba76-5eb0-427d-aa53-683d6421aa7d" />
+<img width="1913" height="951" alt="Screenshot 2025-12-14 223158" src="https://github.com/user-attachments/assets/2a4f55e7-423a-4b3e-a315-362f69389aef" />
+<img width="1919" height="947" alt="Screenshot 2025-12-15 000508" src="https://github.com/user-attachments/assets/4d29c998-31bd-4d76-9643-a86715721c86" />
+
 
 ## ✨ Key Features
 
